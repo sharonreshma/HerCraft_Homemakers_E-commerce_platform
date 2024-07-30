@@ -1,0 +1,226 @@
+/* Contact Page Styling */
+.contact-container {
+    background-color: #FFCCCC; /* Light pink background */
+    padding: 2rem;
+    max-width: 1200px;
+
+    margin: 0 auto;
+    border-radius: 8px;
+    opacity: 0;
+    animation: fadeIn 1.5s forwards; /* Fade-in effect */
+}
+
+.contact-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    animation: slideIn 1s ease-out; /* Slide-in effect */
+}
+
+.contact-header h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-family: 'Pacifico', cursive;
+    color: #333;
+}
+
+.contact-header p {
+    font-size: clamp(1rem, 3vw, 1.25rem);
+    color: #555;
+}
+
+.contact-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+/* Slide-up animation for sections */
+.contact-info,
+.contact-form {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    animation: slideUp 1s ease-out forwards; /* Slide-up effect */
+}
+
+/* Apply slide-up animation with a delay */
+.contact-info {
+    animation-delay: 0.5s; /* Slight delay for staggered effect */
+}
+
+.contact-form {
+    animation-delay: 0.7s; /* Slight delay for staggered effect */
+    
+}
+
+.contact-info h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.contact-info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.contact-icon {
+    font-size: 1.5rem;
+    color: #4c4c4c;
+    margin-right: 0.75rem;
+    transition: transform 0.3s; /* Smooth transform effect */
+}
+
+.contact-info-item p {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* Contact form styling */
+.contact-form h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    width: 750px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    border-bottom: 2px solid #FFCCCC; /* Light pink underline */
+    border-radius: 0;
+    font-size: 1rem;
+    transition: border-bottom-color 0.3s, box-shadow 0.3s; /* Smooth transition */
+}
+
+/* Input focus animation */
+.form-group input:focus,
+.form-group textarea:focus {
+    border-bottom-color: #FFCCCC; /* Light pink underline on focus */
+    box-shadow: 0 0 5px rgba(255, 105, 180, 0.5); /* Light pink shadow */
+}
+
+/* Submit button styling */
+.submit-button {
+    padding: 1rem 2rem;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s; /* Smooth transitions */
+    margin-top: 1rem;
+    display: block;
+    width: 100%;
+}
+
+.submit-button:hover {
+    color: #FFCCCC;
+    transform: scale(1.05); /* Slightly scale up on hover */
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Additional content animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Container for additional content below the form */
+.additional-content {
+    text-align: center;
+    margin-top: 2rem;
+    position: relative;
+    height: 300px; /* Adjust height as needed */
+}
+
+/* Decorative image or graphic */
+.decorative-image {
+    width: 100%;
+    max-width: 500px; /* Adjust the max-width as needed */
+    margin: 0 auto;
+    opacity: 0;
+    animation: fadeInUp 1s 1.5s forwards; /* Fade-in and slide-up effect */
+}
+
+/* Creative floating effect */
+.floating-animation {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px; /* Adjust width as needed */
+    height: 100px; /* Adjust height as needed */
+    background-color: #FFCCCC; /* Light pink background */
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(255, 105, 180, 0.5); /* Light pink shadow */
+    opacity: 0;
+    animation: float 3s infinite; /* Continuous floating effect */
+}
+
+/* Floating animation */
+@keyframes float {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}

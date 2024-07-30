@@ -1,0 +1,11 @@
+.footer-icons {
+    display: flex;
+    gap: 50px;
+    font-size: 24px; /* Adjust size as needed */
+    justify-content: center; /* Center icons horizontally */
+     /* Add space above icons if needed */
+  }
+  .footer-icons svg {
+    color: #FFCCCC; /* Change color as needed */
+  }
+  

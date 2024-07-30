@@ -1,0 +1,164 @@
+/* Reset margins, paddings, and box-sizing */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Pacifico", sans-serif !important;
+}
+
+/* Ensure images fit within their containers */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* App container styling */
+.Homepage {
+  min-height: 200vh;
+  width: 100vw;
+  max-width: 1900px;
+  margin: 0 auto;
+}
+
+.home-container {
+  background-color: white; /* Set the background color to white */
+  padding: 1rem; /* Add some padding to the container */
+  position: relative; /* Set the container to relative to manage z-index */
+  min-height: 100vh; /* Ensure it takes at least the full viewport height */
+}
+
+/* Home banner container styling */
+.home-banner-container {
+  position: relative;
+  display: flex;
+  flex-direction: row; /* Align carousel and text side by side */
+  padding-top: 5rem;
+  padding-left: 2rem;
+}
+
+/* Background image styling */
+.home-bannerImage-container {
+  position: absolute;
+  top: 0; /* Align to the top of the container */
+  right: 0; /* Align to the right of the container */
+  z-index: 1; /* Set z-index to 1 for background images */
+  width: 100%; /* Ensure the container takes the full width */
+  max-width: 550px; /* Restrict maximum width of images */
+  height: 100%; /* Ensure it takes full height */
+}
+
+/* Home text section styling */
+.home-text-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: left;
+  padding: 2rem;
+  position: relative; /* Ensure it stays above background */
+  z-index: 2; /* Set z-index to 2 to place text above background */
+  margin-right: auto; /* Align text section to the left */
+}
+.banner-image-1 {
+  width: 100%; /* Full width of the carousel */
+  margin-top: 20px;
+  height: 75vh; /* Adjust height as needed */
+}
+
+.banner-image-2 {
+   /* Full width of the carousel */
+   width: 20px;
+  margin-top: 60px;
+  height: 70vh;
+   /* Adjust height as needed */
+}
+
+.banner-image-3 {
+  width: 100%; /* Full width of the carousel */
+  margin-top: 40px;
+  height: 70vh; /* Adjust height as needed */
+}
+
+.banner-image-4 {
+   /* Full width of the carousel */
+  margin-top: 60px;
+  height: 70vh; /* Adjust height as needed */
+}
+
+.primary-heading {
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-family: 'Pacifico', cursive;
+  color: #4c4c4c;
+  max-width: 600px;
+  margin-bottom: 1rem;
+  animation: slideIn 2s ease-in-out;
+}
+
+.primary-text {
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  font-family: 'Pacifico', cursive;
+  max-width: 500px;
+  color: #6a6a6a;
+  margin-bottom: 1.5rem;
+  animation: fadeIn 2s ease-in-out;
+}
+
+.secondary-button {
+  padding: 1rem 2.5rem;
+  background-color: black;
+  outline: none;
+  border: none;
+  border-radius: 5rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: whitesmoke;
+  transition: background-color 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: buttonBounce 2s infinite;
+}
+
+.secondary-button a {
+  color: inherit; /* Ensure the link color inherits the button's text color */
+  text-decoration: none;
+  margin-right: 0.5rem;
+}
+
+.secondary-button:hover {
+  transform: scale(1.05); /* Slightly scale up on hover */
+  color: #FFCCCC;
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes buttonBounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}

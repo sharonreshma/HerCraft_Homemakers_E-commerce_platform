@@ -1,0 +1,85 @@
+/* src/styles/Collaborators.css */
+
+.collaborators-container {
+    text-align: center;
+    padding: 70px;
+    background-color: white; /* Background color */
+  }
+  
+  .collaborators-title {
+    font-size: 2.5rem; /* Increased font size for the title */
+    margin-bottom: 30px;
+    position: relative;
+  }
+  
+  .collaborators-title::after {
+    content: '';
+    display: block;
+    width: 350px; /* Increased underline width */
+    height: 4px; /* Increased underline height */
+    background: #ffd1dc; /* Underline color */
+    margin: 10px auto 0;
+  }
+  
+  .collaborators-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px; /* Increased gap between cards */
+  }
+  
+  .collaborator-card {
+    position: relative;
+    width: 300px; /* Increased card width */
+    height: 300px; /* Increased card height */
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .collaborator-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .collaborator-image {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .collaborator-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 15px; /* Increased padding for better spacing */
+    text-align: center;
+    transform: translateY(100%);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+  }
+  
+  .collaborator-card.expanded .collaborator-info {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  
+  .collaborator-name {
+    font-size: 1.5rem; /* Increased font size for the name */
+    margin: 0;
+    font-weight: bold;
+  }
+  
+  .collaborator-description {
+    font-size: 1.2rem; /* Increased font size for the description */
+    margin-top: 10px;
+  }
+  
