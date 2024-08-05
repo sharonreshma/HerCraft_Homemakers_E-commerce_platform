@@ -1,0 +1,67 @@
+/* AdminFeedback.css */
+.admin-feedback-container {
+    padding: 20px;
+    background-color: #f9f9f9; /* Light gray background for the page */
+    border-radius: 8px; /* Rounded corners for container */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  }
+  
+  .header {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #333; /* Dark gray for the header */
+    text-align: center;
+  }
+  
+  .feedback-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .feedback-table th,
+  .feedback-table td {
+    border: 1px solid #ddd; /* Light gray border for table cells */
+    padding: 8px;
+    text-align: center;
+  }
+  
+  .feedback-table th {
+    background-color: #f4f4f4; /* Light gray background for header cells */
+    color: #333; /* Dark gray text color for header cells */
+  }
+  
+  .feedback-table tr:nth-child(even) {
+    background-color: #fafafa; /* Very light gray background for even rows */
+  }
+  
+  .feedback-table tr:hover {
+    background-color: #ffcccc; /* Pastel pink background on hover */
+  }
+  
+  .delete-btn {
+    background-color: #000; /* Black background for delete button */
+    color: #fff; /* White text color */
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+  }
+  
+  .delete-btn:hover {
+    background-color: #333; /* Slightly lighter on hover */
+  }
+  
+  .icon {
+    margin-right: 8px; /* Space between icon and text */
+  }
+  
+  /* Styles for no feedback message */
+  .no-feedback {
+    text-align: center;
+    color: grey; /* Grey color for no feedback message */
+    font-style: italic;
+  }
+  

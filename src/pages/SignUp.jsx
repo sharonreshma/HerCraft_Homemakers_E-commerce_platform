@@ -1,17 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; 
+import axios from 'axios';
 import '../styles/SignUp.css';
 import { FaGoogle } from 'react-icons/fa';
 import signUpImage from '../assets/shop.jpg';
 
 const SignUp = () => {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add your form submission logic here (e.g., API call)
-    // After successful signup, navigate to home page
-    navigate('/');
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    const user = {
+      username,
+      email,
+      password,
+    };
+
+    axios.post('http://localhost:8080/api/register', user)
+      .then(response => {
+        console.log(response.data);
+        navigate('/');
+      })
+      .catch(error => {
+        console.error(error);
+      });
   };
 
   return (
@@ -21,16 +42,16 @@ const SignUp = () => {
         <h2>Create an Account</h2>
         <form className="signup-form" onSubmit={handleSubmit}>
           <label htmlFor="username">Username</label>
-          <input type="text" id="username" name="username" required />
+          <input type="text" id="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
 
           <label htmlFor="email">Email</label>
-          <input type="email" id="email" name="email" required />
+          <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
 
           <label htmlFor="password">Password</label>
-          <input type="password" id="password" name="password" required />
+          <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
 
           <label htmlFor="confirm-password">Confirm Password</label>
-          <input type="password" id="confirm-password" name="confirm-password" required />
+          <input type="password" id="confirm-password" name="confirm-password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
 
           <button type="submit" className="sign-up-btn">Sign Up</button>
         </form>

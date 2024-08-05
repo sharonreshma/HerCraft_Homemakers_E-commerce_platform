@@ -91,9 +91,12 @@ img {
   font-family: 'Pacifico', cursive;
   color: #4c4c4c;
   max-width: 600px;
+  margin: 0; /* Reset margin if necessary */
   margin-bottom: 1rem;
+  text-align: left; /* Align text to the left */
   animation: slideIn 2s ease-in-out;
 }
+
 
 .primary-text {
   font-size: clamp(1rem, 3vw, 1.5rem);

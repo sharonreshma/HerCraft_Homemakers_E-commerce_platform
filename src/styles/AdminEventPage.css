@@ -1,0 +1,297 @@
+/* AdminEventPage.css */
+
+/* Global Styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+
+/* Container */
+.admin-event-page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header */
+.admin-header {
+  font-size: 2.5em;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 40px;
+  color: #2c3e50;
+}
+
+/* Add Event Form */
+.add-event-form-container {
+  background-color: #ffcccc;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 40px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.add-event-form-container h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  color: #000;
+}
+
+.add-event-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.add-event-form label {
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.add-event-form input,
+.add-event-form textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 1em;
+}
+
+.add-event-form textarea {
+  resize: none;
+}
+
+.add-event-form button.adevbtn-primary {
+  grid-column: span 2;
+  padding: 10px 20px;
+  background-color: #000;
+  border: none;
+  color: white;
+  font-size: 1em;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-event-form button.adevbtn-primary:hover {
+  color: #ffb3b3;
+}
+
+/* Registration Form */
+.adregistration-form-container {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 40px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.adregistration-form-container h2 {
+  margin-bottom: 20px;
+  color: #ffcccc;
+}
+
+.adregistration-form label {
+  font-weight: 500;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.adregistration-form input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 1em;
+  margin-bottom: 20px;
+}
+
+.adpayment-method-options {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.adpayment-method-options label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.adregistration-form button.evbtn-primary {
+  width: 100%;
+  padding: 10px 20px;
+  background-color: #ffcccc;
+  border: none;
+  color: white;
+  font-size: 1em;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.adregistration-form button.evbtn-primary:hover {
+  background-color: #ffb3b3;
+}
+
+/* Registration Success */
+.adregistration-success {
+  background-color: #dff0d8;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.adregistration-success h2 {
+  margin-bottom: 10px;
+  color: #3c763d;
+}
+
+.adregistration-success p {
+  color: #3c763d;
+}
+
+.adregistration-success button.evbtn-primary {
+  background-color: #ffcccc;
+}
+
+.adregistration-success button.evbtn-primary:hover {
+  background-color: #ffb3b3;
+}
+
+/* User List */
+.aduser-list-container {
+  margin-bottom: 40px;
+}
+
+.aduser-list-container h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  color: #ffb3b3;
+}
+
+.aduser-list-container label {
+  font-weight: 500;
+}
+
+.aduser-list-container select {
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  margin-left: 10px;
+  font-size: 1em;
+}
+
+.aduser-list-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.aduser-list-container th,
+.aduser-list-container td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.aduser-list-container th {
+  background-color: #f4f4f4;
+  font-weight: 600;
+}
+
+/* Event List */
+.adevent-list-container {
+  margin-bottom: 40px;
+}
+
+.adevent-list-container h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  color: #000;
+}
+
+.adevent-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.adevent-card {
+  background-color: #ffcccc;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.adevent-icon {
+  font-size: 1.5em;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.event-info h3 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.adevent-info p {
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.adevent-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.adevbtn-primary {
+  padding: 10px 20px;
+  background-color: #ffcccc;
+  border: none;
+  color: white;
+  font-size: 1em;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.adevbtn-primary:hover {
+  background-color: #ffb3b3;
+}
+
+.adevbtn-delete {
+  padding: 10px 20px;
+  background-color: grey;
+  border: none;
+  color: white;
+  font-size: 1em;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.adevbtn-delete:hover {
+  background-color: grey;
+}

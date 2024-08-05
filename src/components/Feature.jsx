@@ -1,4 +1,3 @@
-// src/components/Feature.js
 import React from 'react';
 import Slider from 'react-slick';
 import { useInView } from 'react-intersection-observer';
@@ -49,8 +48,9 @@ const Feature = () => {
   const navigate = useNavigate();
 
   const handleExploreClick = () => {
-    navigate('/product', { replace: true, state: { scrollToTop: true } });
+    navigate('/product', { state: { scrollToTop: true } });
   };
+  
 
   return (
     <div className="featured-products-container">

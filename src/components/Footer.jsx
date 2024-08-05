@@ -14,7 +14,7 @@ function Copyright(props) {
     <Typography variant="body2" color="rgb(255,255,255)" align="center" {...props}>
       {'Copyright © '}
       <Link color="rgb(255,255,255)" href="https://mui.com/">
-        SheMart
+        HerCraft
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}

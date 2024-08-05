@@ -1,0 +1,111 @@
+.aduser-management {
+    padding: 20px;
+    background-color: #f9f9f9; /* Light gray background for the page */
+  }
+  
+  .aduser-management h2 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #333; /* Dark gray for the heading */
+  }
+  
+  .aduser-management .adbtn-primary {
+    margin-bottom: 20px; /* Adds space below the button */
+  }
+  
+  .aduser-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .aduser-table th, .aduser-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  .aduser-table th {
+    background-color: #f4f4f4; /* Light gray background for table headers */
+  }
+  
+  .aduser-table tr:nth-child(even) {
+    background-color: #fafafa; /* Very light gray for even rows */
+  }
+  
+  .aduser-table tr:hover {
+    background-color: #ffcccc; /* Pastel pink for row hover */
+  }
+  
+  .adbtn-primary {
+    background-color: #ffcccc; /* Pastel pink background */
+    color: #000; /* Black text color */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+  }
+  
+  .adbtn-primary:hover {
+    background-color: #ff9999; /* Slightly darker pastel pink on hover */
+  }
+  
+  .adbtn-danger {
+    background-color: #000; /* Black background */
+    color: #fff; /* White text color */
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+  }
+  
+  .adbtn-danger:hover {
+    background-color: #333; /* Slightly lighter on hover */
+    color: white;
+  }
+  
+  .adicon {
+    margin-right: 8px; /* Space between icon and text */
+  }
+  
+  /* Styles for the form */
+  .aduser-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px; /* Adds space below the form */
+  }
+  
+  .aduser-form input, .aduser-form select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: 100%;
+  }
+  
+  .aduser-form select {
+    height: 40px;
+  }
+  
+  .aduser-form button {
+    align-self: flex-start;
+    background-color: #333; /* Green background */
+    color: white; /* White text */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .aduser-form button:hover {
+    background-color: #ff9999; /* Slightly darker green on hover */
+    color:#000
+  }
+  

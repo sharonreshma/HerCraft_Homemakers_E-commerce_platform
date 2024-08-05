@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import  { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Modal from 'react-modal';
 import { FaSearch, FaShoppingBag, FaPlusCircle, FaMinusCircle } from 'react-icons/fa';
 import p1 from '../assets/p1.jpg';
@@ -101,6 +103,24 @@ const ProductsPage = () => {
       setCartItems(updatedCartItems);
     }
   };
+  
+    const location = useLocation();
+  
+    useEffect(() => {
+      // Scroll to top when the component mounts or the location changes
+      if (location.state?.scrollToTop) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }, [location]);
+
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // Assuming false means logged out
+
+    const handleCheckout = () => {
+      
+        toast.success('Proceed to Payment!');
+      } 
+    
+  
 
   const isInCart = (product) => cartItems.some((item) => item.id === product.id);
 
@@ -414,7 +434,10 @@ const ProductsPage = () => {
             ₹{cartItems.reduce((total, item) => total + item.price * item.quantity, 0)}
           </div>
         </div>
-        <button style={styles.checkoutButton}>Checkout</button>
+        <button style={styles.checkoutButton} onClick={handleCheckout}>
+      Checkout
+    </button>
+    <ToastContainer />
       </Modal>
     </div>
   );

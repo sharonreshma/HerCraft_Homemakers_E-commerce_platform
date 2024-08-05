@@ -1,17 +1,27 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
 import { FaGoogle, FaUser, FaLock } from 'react-icons/fa';
 import login1 from '../assets/shop.jpg';
+import { AuthContext } from '../App'; // Correctly import AuthContext
 
 function Login() {
   const navigate = useNavigate();
+  const { setRole } = useContext(AuthContext); // Use context to get setRole
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add your login logic here (e.g., API call)
-    // After successful login, navigate to home page
-    navigate('/');
+    const username = e.target.username.value;
+    const password = e.target.password.value;
+
+    // Simulate login logic
+    if (username === 'admin' && password === 'admin') {
+      setRole('admin');
+      navigate('/admin');
+    } else if (username && password) {
+      setRole('user');
+      navigate('/');
+    }
   };
 
   return (

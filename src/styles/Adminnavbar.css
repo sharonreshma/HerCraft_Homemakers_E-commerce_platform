@@ -1,0 +1,42 @@
+/* src/styles/AdminNavbar.css */
+.navbar {
+    background-color: black !important;
+    padding: 0.7rem 1rem; /* Reduce padding to make the navbar smaller */
+  }
+  
+  .navbar-brand {
+    color: white !important;
+    font-size: 1.2rem; /* Reduce font size */
+  }
+  
+  .navbar-nav .nav-link {
+    color: white !important;
+    font-size: 1rem; /* Reduce font size */
+    font-weight: 600;
+    transition: color 0.3s, text-decoration 0.3s;
+    margin: 0 1rem; /* Adjust spacing between items */
+  }
+  
+  .navbar-nav .nav-link:hover {
+    color: #FFCCCC !important;
+    text-decoration: underline;
+    text-decoration-color: #FFCCCC; /* Underline color */
+  }
+  
+  .navbar-right {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Pushes the user icon and buttons to the right */
+  }
+  
+  .navbar-right .btn {
+    background-color: white;
+    color: black;
+    margin-left: 0.5rem; /* Add space between the buttons */
+  }
+  
+  .navbar-right .btn:hover {
+    background-color: #FFCCCC;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  

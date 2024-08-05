@@ -1,0 +1,174 @@
+/* Reset margins, paddings, and box-sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Pacifico", sans-serif !important;
+}
+
+/* Ensure images fit within their containers */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* App container styling */
+.AdminDashboard {
+    min-height: 200vh;
+    width: 100vw;
+    max-width: 1900px;
+    margin: 0 auto;
+}
+
+/* Home container styling */
+.adminhome-container {
+    background-color: white !important; /* Ensure background color is white */
+    padding: 1rem;
+    position: relative;
+    min-height: 100vh;
+    border: 1px solid red; /* Add border to visually confirm container boundaries */
+}
+
+/* Home banner container styling */
+.adminhome-banner-container {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    padding-top: 5rem;
+    padding-left: 2rem;
+    background-color: white; /* Ensure banner container background is white */
+}
+
+/* Background image styling */
+.adminhome-bannerImage-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    width: 100%;
+    max-width: 550px;
+    height: 100%;
+    background-color: white; /* Ensure background color is white */
+}
+
+/* Home text section styling */
+.adminhome-text-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    padding: 2rem;
+    position: relative;
+    z-index: 2;
+    margin-right: auto;
+}
+
+/* Carousel image styling */
+.adminbanner-image-1,
+.adminbanner-image-2,
+.adminbanner-image-3,
+.adminbanner-image-4 {
+    width: 100%;
+    height: auto; /* Adjust height if needed */
+    background-color: white; /* Ensure background color is white */
+    margin-top: 20px; /* Adjust margin if needed */
+}
+
+/* Specific height adjustments */
+.adminbanner-image-2 {
+    width: 20px;
+    height: 70vh;
+    margin-top: 60px;
+}
+
+.adminbanner-image-3 {
+    height: 70vh;
+    margin-top: 40px;
+}
+
+.adminbanner-image-4 {
+    height: 70vh;
+    margin-top: 60px;
+}
+
+.adminprimary-heading {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-family: 'Pacifico', cursive;
+    color: #4c4c4c;
+    max-width: 600px;
+    margin: 0; /* Reset margin if necessary */
+    margin-bottom: 1rem;
+    text-align: left; /* Align text to the left */
+    animation: slideIn 2s ease-in-out;
+}
+
+
+.adminprimary-text {
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    font-family: 'Pacifico', cursive;
+    max-width: 500px;
+    color: #6a6a6a;
+    margin-bottom: 1.5rem;
+    animation: fadeIn 2s ease-in-out;
+}
+
+.adminsecondary-button {
+    padding: 1rem 2.5rem;
+    background-color: black;
+    outline: none;
+    border: none;
+    border-radius: 5rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    font-weight: 600;
+    color: whitesmoke;
+    transition: background-color 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: buttonBounce 2s infinite;
+}
+
+.adminsecondary-button a {
+    color: inherit;
+    text-decoration: none;
+    margin-right: 0.5rem;
+}
+
+.adminsecondary-button:hover {
+    transform: scale(1.05);
+    color: #FFCCCC;
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes buttonBounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
