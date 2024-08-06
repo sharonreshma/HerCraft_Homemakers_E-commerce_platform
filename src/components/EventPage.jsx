@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { FaCreditCard, FaPaypal, FaUniversity } from 'react-icons/fa';
 import '../styles/EventPage.css';
 import handicraftSaleImg from '../assets/hc.jpeg';
@@ -12,7 +13,7 @@ const events = [
     date: 'August 15, 2024',
     description: 'Join us for an exciting sale on a wide range of unique handicrafts. Enjoy exclusive discounts and find the perfect handmade items for yourself or as gifts.',
     image: handicraftSaleImg,
-    price: 10, // Example price for the event
+    price: 10,
   },
   {
     id: 2,
@@ -20,15 +21,15 @@ const events = [
     date: 'August 22, 2024',
     description: 'A special talk on effective business strategies and tips for handicraft entrepreneurs. Learn from industry experts and elevate your business game.',
     image: businessTipsImg,
-    price: 15, // Example price for the event
+    price: 15,
   },
   {
     id: 3,
     title: 'My Journey as an Entrepreneur',
     date: 'August 29, 2024',
-    description: 'An inspiring journey of Sita founder of JustCraft where she will share key challenges, successes, and insights from her experience.',
+    description: 'An inspiring journey of Sita, founder of JustCraft, where she will share key challenges, successes, and insights from her experience.',
     image: entrepreneurJourneyImg,
-    price: 20, // Example price for the event
+    price: 20,
   },
 ];
 
@@ -37,6 +38,11 @@ const EventPage = () => {
   const [showForm, setShowForm] = useState(false);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+  });
 
   const handleRegisterClick = (event) => {
     setSelectedEvent(event);
@@ -44,16 +50,31 @@ const EventPage = () => {
     setRegistrationSuccess(false);
   };
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    handlePayment();
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
-  const handlePayment = () => {
-    if (selectedPaymentMethod) {
-      setRegistrationSuccess(true);
-    } else {
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!selectedPaymentMethod) {
       alert('Please select a payment method.');
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:8080/api/users/register', {
+        ...formData,
+        paymentMethod: selectedPaymentMethod,
+      });
+
+      if (response.status === 200) {
+        setRegistrationSuccess(true);
+      }
+    } catch (error) {
+      console.error('Error during registration:', error);
+      alert('Registration failed. Please try again.');
     }
   };
 
@@ -89,16 +110,37 @@ const EventPage = () => {
 
       {showForm && !registrationSuccess && (
         <div className="registration-form-container">
-          <h2>Register for {selectedEvent.title}</h2>
+          <h2>Register for {selectedEvent?.title}</h2>
           <form className="registration-form" onSubmit={handleFormSubmit}>
             <label htmlFor="name">Name:</label>
-            <input type="text" id="name" name="name" required />
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleFormChange}
+              required
+            />
 
             <label htmlFor="email">Email:</label>
-            <input type="email" id="email" name="email" required />
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleFormChange}
+              required
+            />
 
             <label htmlFor="phone">Phone:</label>
-            <input type="tel" id="phone" name="phone" required />
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              value={formData.phone}
+              onChange={handleFormChange}
+              required
+            />
 
             <label htmlFor="payment-method">Choose Payment Method:</label>
             <div className="payment-method-options">
@@ -144,10 +186,7 @@ const EventPage = () => {
       {registrationSuccess && (
         <div className="registration-success">
           <p>Registration successful! Thank you for being a part of this event.</p>
-          <button
-            className="evbtn-primary"
-            onClick={handleCloseSuccessMessage}
-          >
+          <button className="evbtn-primary" onClick={handleCloseSuccessMessage}>
             Close
           </button>
         </div>

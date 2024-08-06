@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import  { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import Modal from 'react-modal';
 import { FaSearch, FaShoppingBag, FaPlusCircle, FaMinusCircle } from 'react-icons/fa';
@@ -91,7 +92,12 @@ const ProductsPage = () => {
       setCartItems(updatedCartItems);
     }
   };
-
+  const navigate = useNavigate();
+  const handleCheckout = () => {
+    
+    navigate('/paymentpage'); // Replace '/paymentpage' with the actual route
+  };
+  
   const removeFromCart = (product) => {
     const productIndex = cartItems.findIndex((item) => item.id === product.id);
     if (productIndex !== -1) {
@@ -115,10 +121,7 @@ const ProductsPage = () => {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false); // Assuming false means logged out
 
-    const handleCheckout = () => {
-      
-        toast.success('Proceed to Payment!');
-      } 
+    
     
   
 

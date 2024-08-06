@@ -26,6 +26,7 @@ import EventPage from './components/EventPage';
 import { Element } from 'react-scroll'; // Import Element
 import AdminEventPage from './admin/AdminEventPage';
 
+
 export const AuthContext = React.createContext();
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
             <Route index element={<HomePage />} />
             <Route path="about" element={<AboutPage />} />
             <Route path="contact" element={<Contact />} />
+            
             <Route path="product/*" element={
               <>
                 <ProductsPage />

@@ -10,29 +10,33 @@ const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      alert('Passwords do not match');
       return;
     }
-
-    const user = {
-      username,
-      email,
-      password,
-    };
-
-    axios.post('http://localhost:8080/api/register', user)
-      .then(response => {
-        console.log(response.data);
-        navigate('/');
-      })
-      .catch(error => {
-        console.error(error);
+    try {
+      const response = await fetch('http://localhost:8080/api/userregister/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, email, password }),
       });
+      if (response.ok) {
+        console.log('User Registered');
+        navigate('/login');
+      } else {
+        alert('Registration failed');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred');
+    }
   };
 
   return (
@@ -40,18 +44,49 @@ const SignUp = () => {
       <div className="signup-section">
         <div className="logo"><h2>HerCraft</h2></div>
         <h2>Create an Account</h2>
+        
+        {error && <div className="error-message">{error}</div>}
+        
         <form className="signup-form" onSubmit={handleSubmit}>
-          <label htmlFor="username">Username</label>
-          <input type="text" id="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+          <label htmlFor="username">Name</label>
+          <input 
+            type="text" 
+            id="username" 
+            name="username" 
+            value={username} 
+            onChange={(e) => setUsername(e.target.value)} 
+            required 
+          />
 
           <label htmlFor="email">Email</label>
-          <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+            required 
+          />
 
           <label htmlFor="password">Password</label>
-          <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)} 
+            required 
+          />
 
           <label htmlFor="confirm-password">Confirm Password</label>
-          <input type="password" id="confirm-password" name="confirm-password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+          <input 
+            type="password" 
+            id="confirm-password" 
+            name="confirm-password" 
+            value={confirmPassword} 
+            onChange={(e) => setConfirmPassword(e.target.value)} 
+            required 
+          />
 
           <button type="submit" className="sign-up-btn">Sign Up</button>
         </form>

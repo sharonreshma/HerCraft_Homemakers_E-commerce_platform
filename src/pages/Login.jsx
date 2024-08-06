@@ -1,49 +1,79 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
 import { FaGoogle, FaUser, FaLock } from 'react-icons/fa';
 import login1 from '../assets/shop.jpg';
-import { AuthContext } from '../App'; // Correctly import AuthContext
+import { AuthContext } from '../App';
+import axios from 'axios';
 
 function Login() {
   const navigate = useNavigate();
-  const { setRole } = useContext(AuthContext); // Use context to get setRole
+  const { setRole } = useContext(AuthContext);
+  const [error, setError] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const username = e.target.username.value;
-    const password = e.target.password.value;
-
-    // Simulate login logic
-    if (username === 'admin' && password === 'admin') {
-      setRole('admin');
-      navigate('/admin');
-    } else if (username && password) {
-      setRole('user');
-      navigate('/');
+    
+    try {
+      const response = await axios.post('http://localhost:8080/api/auth/login', { username, password });
+      const user = response.data;
+  
+      if (user) {
+        setRole(user.role || 'user');
+        if (user.role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
+      } else {
+        setError('Invalid credentials');
+      }
+    } catch (error) {
+      setError('Invalid credentials');
+      console.error('Login error:', error);
     }
   };
+  
 
   return (
     <div className="container">
       <div className="image-sectionnew">
-        <img src={login1} alt="Login 1" />
+        <img src={login1} alt="Login" />
         <p className="title">Welcome to HerCraft</p>
         <p className="description">"Empowering Dreams, One Login at a Time"</p>
       </div>
       <div className="login-section">
         <h1 className="logo">HerCraft</h1>
         <h2>Good to see you Again!</h2>
+        {error && <p className="error-message">{error}</p>}
         <form className="login-form" onSubmit={handleSubmit}>
           <label htmlFor="username">
-            <FaUser className="icon" /> User name or Email
+            <FaUser className="icon" /> Username
           </label>
-          <input type="text" id="username" name="username" placeholder="Enter Valid Username or Email" required />
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Enter Valid Username or Email"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
           <label htmlFor="password">
             <FaLock className="icon" /> Password
           </label>
-          <input type="password" id="password" name="password" placeholder="********" required />
-          <a href="/" className="forgot-password">Forgot password?</a>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="********"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <a href="/forgot-password" className="forgot-password">Forgot password?</a>
           <button type="submit" className="sign-in-btn">Login</button>
         </form>
         <div className="or-section">

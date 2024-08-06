@@ -1,9 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/Contact.css';
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
-import contactImage from '../assets/girl.png'; // Adjust the path if necessary
+import contactImage from '../assets/girl.png';
+import axios from 'axios';
 
 const Contact = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post('http://localhost:8080/api/contact/submit', {
+        name,
+        email,
+        message
+      });
+
+      if (response.status === 201) {
+        alert('Message sent successfully!');
+        setName('');
+        setEmail('');
+        setMessage('');
+      } else {
+        alert('Failed to send message.');
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      alert('An error occurred. Please try again later.');
+    }
+  };
+
   return (
     <div className="contact-container">
       <div className="contact-header">
@@ -25,25 +54,48 @@ const Contact = () => {
             <FaEnvelope className="contact-icon" />
             <p>hercraft@gmail.com</p>
           </div>
-          {/* Image added below the email */}
           <div className="contact-info-item">
             <img src={contactImage} alt="Contact" className="contact-image" />
           </div>
         </div>
         <div className="contact-form">
           <h2>Contact Form</h2>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="name">Name</label>
-              <input type="text" id="name" name="name" placeholder="Your Name" required />
+              <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Your Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
             </div>
             <div className="form-group">
               <label htmlFor="email">Email</label>
-              <input type="email" id="email" name="email" placeholder="Your Email" required />
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Your Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </div>
             <div className="form-group">
               <label htmlFor="message">Message</label>
-              <textarea id="message" name="message" rows="4" placeholder="Your Message" required></textarea>
+              <textarea
+                id="message"
+                name="message"
+                rows="4"
+                placeholder="Your Message"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                required
+              ></textarea>
             </div>
             <button type="submit" className="submit-button">Send Message</button>
           </form>
