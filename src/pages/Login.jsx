@@ -1,28 +1,25 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
 import { FaGoogle, FaUser, FaLock } from 'react-icons/fa';
 import login1 from '../assets/shop.jpg';
-import { AuthContext } from '../App';
 import axios from 'axios';
 
 function Login() {
   const navigate = useNavigate();
-  const { setRole } = useContext(AuthContext);
   const [error, setError] = useState('');
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+  
     try {
-      const response = await axios.post('http://localhost:8080/api/auth/login', { username, password });
+      const response = await axios.post('http://localhost:8080/api/auth/login', { email, password });
       const user = response.data;
   
       if (user) {
-        setRole(user.role || 'user');
-        if (user.role === 'admin') {
+        if (email === 'admin1@gmail.com') {
           navigate('/admin');
         } else {
           navigate('/');
@@ -35,7 +32,6 @@ function Login() {
       console.error('Login error:', error);
     }
   };
-  
 
   return (
     <div className="container">
@@ -49,16 +45,16 @@ function Login() {
         <h2>Good to see you Again!</h2>
         {error && <p className="error-message">{error}</p>}
         <form className="login-form" onSubmit={handleSubmit}>
-          <label htmlFor="username">
-            <FaUser className="icon" /> Username
+          <label htmlFor="email">
+            <FaUser className="icon" /> Email
           </label>
           <input
-            type="text"
-            id="username"
-            name="username"
-            placeholder="Enter Valid Username or Email"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter Valid Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
           <label htmlFor="password">

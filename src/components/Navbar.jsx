@@ -1,16 +1,12 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { FaHome, FaInfoCircle, FaBox, FaPhone } from 'react-icons/fa';
+import { FaHome, FaInfoCircle, FaBox, FaPhone, FaUser } from 'react-icons/fa'; // Import FaUser
 import '../styles/Navbar.css';
 import { AuthContext } from '../App'; // Import AuthContext
 
 const Navbar = () => {
-  const { role, setRole } = useContext(AuthContext); // Use context to get role and setRole
-
-  const handleLogout = () => {
-    setRole(null); // Clear the user's role on logout
-  };
+  const { isLoggedIn, handleLogout } = useContext(AuthContext); // Use context to get isLoggedIn and handleLogout
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light">
@@ -40,10 +36,16 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="navbar-right">
-        {role ? (
-          <button className="btn btn-outline-light ml-2" onClick={handleLogout}>
-            Logout
-          </button>
+        {isLoggedIn ? (
+          <div className="dropdown">
+            <button className="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <FaUser className="mr-2" /> Profile
+            </button>
+            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <Link className="dropdown-item" to="/profile">Profile</Link>
+              <button className="dropdown-item" onClick={handleLogout}>Logout</button>
+            </div>
+          </div>
         ) : (
           <>
             <Link to="/signup">

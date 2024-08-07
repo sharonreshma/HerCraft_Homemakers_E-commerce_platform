@@ -95,7 +95,7 @@ const ProductsPage = () => {
   const navigate = useNavigate();
   const handleCheckout = () => {
     
-    navigate('/paymentpage'); // Replace '/paymentpage' with the actual route
+    navigate('/paymentpage',{ state: { cartItems } }); // Replace '/paymentpage' with the actual route
   };
   
   const removeFromCart = (product) => {

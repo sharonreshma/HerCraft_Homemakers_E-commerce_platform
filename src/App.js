@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import HomePage from './components/Homepage';
 import Navbar from './components/Navbar';
@@ -25,15 +25,16 @@ import AdminFeedback from './admin/AdminFeedback';
 import EventPage from './components/EventPage';
 import { Element } from 'react-scroll'; // Import Element
 import AdminEventPage from './admin/AdminEventPage';
-
+import PaymentPage from './components/PaymentPage';
+import OrderSuccess from './components/OrderSuccess';
 
 export const AuthContext = React.createContext();
 
 function App() {
-  const [role, setRole] = useState(null);
-
+  
   return (
-    <AuthContext.Provider value={{ role, setRole }}>
+    
+    <AuthContext.Provider value={{ }}>
       <Router>
         <Routes>
           <Route path="/signup" element={<NoNavbar element={<SignUp />} />} />
@@ -42,7 +43,8 @@ function App() {
             <Route index element={<HomePage />} />
             <Route path="about" element={<AboutPage />} />
             <Route path="contact" element={<Contact />} />
-            
+            <Route path="paymentpage" element={<PaymentPage />} />
+            <Route path="ordersuccess" element={<OrderSuccess />} />
             <Route path="product/*" element={
               <>
                 <ProductsPage />
@@ -50,123 +52,53 @@ function App() {
               </>
             } />
             <Route path="admin" element={
-              role === 'admin' ? (
-                <>
-                  <AdminNavbar />
-                  <AdminDashboard />
-                  <Footer />
-                </>
-              ) : (
-                <>
-                  <HomePage />
-                  <Deals />
-                  <Feature />
-                  <EventPage />
-                  <Footer />
-                </>
-              )
+              <>
+                <AdminNavbar />
+                <AdminDashboard />
+                <Footer />
+              </>
             } />
             <Route path="admin/categories" element={
-              role === 'admin' ? (
-                <>
-                  <AdminNavbar />
-                  <CategoriesPage />
-                  <Footer />
-                </>
-              ) : (
-                <>
-                  <HomePage />
-                  <Deals />
-                  <Feature />
-                  <EventPage />
-                  <Footer />
-                </>
-              )
+              <>
+                <AdminNavbar />
+                <CategoriesPage />
+                <Footer />
+              </>
             } />
             <Route path="admin/product" element={
-              role === 'admin' ? (
-                <>
-                  <AdminNavbar />
-                  <AdminProductsPage />
-                  <Footer />
-                </>
-              ) : (
-                <>
-                  <HomePage />
-                  <Deals />
-                  <Feature />
-                  <EventPage />
-                  <Footer />
-                </>
-              )
+              <>
+                <AdminNavbar />
+                <AdminProductsPage />
+                <Footer />
+              </>
             } />
             <Route path="admin/orders" element={
-              role === 'admin' ? (
-                <>
-                  <AdminNavbar />
-                  <AdminOrdersPage />
-                  <Footer />
-                </>
-              ) : (
-                <>
-                  <HomePage />
-                  <Deals />
-                  <Feature />
-                  <EventPage />
-                  <Footer />
-                </>
-              )
+              <>
+                <AdminNavbar />
+                <AdminOrdersPage />
+                <Footer />
+              </>
             } />
             <Route path="admin/feedback" element={
-              role === 'admin' ? (
-                <>
-                  <AdminNavbar />
-                  <AdminFeedback />
-                  <Footer />
-                </>
-              ) : (
-                <>
-                  <HomePage />
-                  <Deals />
-                  <Feature />
-                  <EventPage />
-                  <Footer />
-                </>
-              )
+              <>
+                <AdminNavbar />
+                <AdminFeedback />
+                <Footer />
+              </>
             } />
             <Route path="admin/users" element={
-              role === 'admin' ? (
-                <>
-                  <AdminNavbar />
-                  <User />
-                  <Footer />
-                </>
-              ) : (
-                <>
-                  <HomePage />
-                  <Deals />
-                  <Feature />
-                  <EventPage />
-                  <Footer />
-                </>
-              )
+              <>
+                <AdminNavbar />
+                <User />
+                <Footer />
+              </>
             } />
             <Route path="admin/events" element={
-              role === 'admin' ? (
-                <>
-                  <AdminNavbar />
-                  <AdminEventPage />
-                  <Footer />
-                </>
-              ) : (
-                <>
-                  <HomePage />
-                  <Deals />
-                  <Feature />
-                  <EventPage />
-                  <Footer />
-                </>
-              )
+              <>
+                <AdminNavbar />
+                <AdminEventPage />
+                <Footer />
+              </>
             } />
             <Route path="*" element={<HomePage />} />
           </Route>
@@ -178,129 +110,76 @@ function App() {
 
 const Layout = () => {
   const location = useLocation();
-  const { role } = React.useContext(AuthContext);
+
+  // Check if the current path is an admin route
+  const isAdminRoute = location.pathname.startsWith('/admin');
 
   return (
     <div className="App">
-      {location.pathname !== '/login' && location.pathname !== '/signup' && (role === 'admin' ? <AdminNavbar /> : <Navbar />)}
+      {!isAdminRoute && <Navbar />}
       <Routes>
         <Route path="/" element={
           <>
             <HomePage />
             <Deals />
             <Feature />
-            <EventPage /> {/* Ensure EventPage appears after Feature */}
+            <EventPage /> 
+            {/* Ensure EventPage appears after Feature */}
             <Footer />
           </>
         } />
         <Route path="about" element={<AboutPage />} />
         <Route path="product/*" element={<><ProductsPage /><Footer/></>} />
         <Route path="contact" element={<><Contact /><Footer/></>} />
+        <Route path="paymentpage" element={<PaymentPage />} />
+        <Route path="ordersuccess" element={<OrderSuccess />} />
         <Route path="admin" element={
-          role === 'admin' ? (
-            <>
-              <AdminDashboard />
-              <Footer />
-            </>
-          ) : (
-            <>
-              <HomePage />
-              <Deals />
-              <Feature />
-              <EventPage />
-              <Footer />
-            </>
-          )
+          <>
+           <AdminNavbar />
+            <AdminDashboard />
+            <Footer />
+          </>
         } />
         <Route path="admin/categories" element={
-          role === 'admin' ? (
-            <>
-              <CategoriesPage />
-              <Footer />
-            </>
-          ) : (
-            <HomePage />
-          )
+          <>
+            <CategoriesPage />
+            <Footer />
+          </>
         } />
         <Route path="admin/product" element={
-          role === 'admin' ? (
-            <>
-              <AdminProductsPage />
-              <Footer />
-            </>
-          ) : (
-            <>
-              <HomePage />
-              <Deals />
-              <Feature />
-              <EventPage />
-              <Footer />
-            </>
-          )
+          <>
+           <AdminNavbar />
+            <AdminProductsPage />
+            <Footer />
+          </>
         } />
         <Route path="admin/feedback" element={
-          role === 'admin' ? (
-            <>
-              <AdminFeedback />
-              <Footer />
-            </>
-          ) : (
-            <>
-              <HomePage />
-              <Deals />
-              <Feature />
-              <EventPage />
-              <Footer />
-            </>
-          )
+          <>
+           <AdminNavbar />
+            <AdminFeedback />
+            <Footer />
+          </>
         } />
         <Route path="admin/orders" element={
-          role === 'admin' ? (
-            <>
-              <AdminOrdersPage />
-              <Footer />
-            </>
-          ) : (
-            <>
-              <HomePage />
-              <Deals />
-              <Feature />
-              <EventPage />
-              <Footer />
-            </>
-          )
+          <>
+           <AdminNavbar />
+            <AdminOrdersPage />
+            <Footer />
+          </>
         } />
-          <Route path="admin/events" element={
-          role === 'admin' ? (
-            <>
-              <AdminEventPage />
-              <Footer />
-            </>
-          ) : (
-            <>
-              <HomePage />
-              <Deals />
-              <Feature />
-              <EventPage />
-              <Footer />
-            </>
-          )
+        <Route path="admin/events" element={
+          <>
+           <AdminNavbar />
+            <AdminEventPage />
+            <Footer />
+          </>
         } />
         <Route path="admin/users" element={
-          role === 'admin' ? (
-            <>
-              <User />
-              <Footer />
-            </>
-          ) : (
-            <>
-              <HomePage />
-              <Deals />
-              <Feature />
-              <EventPage />
-              <Footer />
-            </>
-          )
+          <>
+           <AdminNavbar />
+            <User />
+            <Footer />
+          </>
         } />
         <Route path="*" element={<HomePage />} />
       </Routes>

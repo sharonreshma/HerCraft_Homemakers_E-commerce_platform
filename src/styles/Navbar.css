@@ -45,4 +45,11 @@
   background-color: #FFCCCC;
   transition: background-color 0.3s, color 0.3s;
 }
+.navbar-right .dropdown {
+  position: relative;
+}
 
+.navbar-right .dropdown-menu {
+  right: 0;
+  left: auto;
+}

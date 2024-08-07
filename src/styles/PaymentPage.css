@@ -1,123 +1,173 @@
-/* PaymentPage.css */
-
 .payment-page {
-    background-color: #ffe4e1; /* Light pink background */
-    color: #000000; /* Black text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #ffcccc; /* Light pink background */
+    padding: 20px;
+}
+
+.payment-container {
+    max-width: 1200px; /* Maximum width of container */
+    width: 100%;
+    background: #ffffff; /* White background */
+    border-radius: 16px; /* Rounded corners */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Deeper shadow */
+    display: flex; /* Flex container for left and right sections */
+    justify-content: space-between; /* Space between left and right sections */
+    padding: 20px; /* Padding inside container */
+}
+
+.left-section {
+    flex: 2; /* Takes up more space */
+    padding: 20px;
+    border-right: 1px solid #dcdcdc; /* Divider line */
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+.right-section {
+    flex: 1; /* Takes up less space */
+    padding: 20px;
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+.customer-details, .order-summary {
+    margin-bottom: 24px; /* Increased margin */
+}
+
+.details-title, .summary-title {
+    font-size: 24px; /* Adjusted font size */
+    margin-bottom: 16px; /* Decreased margin */
+    border-bottom: 3px solid #e0e0e0; /* Thicker grey border */
+    padding-bottom: 8px; /* Decreased padding */
+    color: #333333; /* Black text */
+    font-weight: 700; /* Bolder font weight */
+}
+
+.details-group, .form-group, .form-row {
     display: flex;
     flex-direction: column;
+    margin-bottom: 20px; /* Decreased margin */
+}
+
+.details-label, .form-label {
+    font-weight: 600; /* Slightly bolder */
+    margin-bottom: 8px; /* Decreased margin */
+    color: #555555; /* Dark grey text */
+}
+
+.details-input, .form-input, textarea {
+    padding: 12px; /* Adjusted padding */
+    border: 1px solid #dcdcdc; /* Light grey border */
+    border-radius: 8px; /* More rounded corners */
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #f5f5f5; /* Light grey background for inputs */
+}
+
+.details-input::placeholder, .form-input::placeholder {
+    color: #999999; /* Slightly darker grey placeholder text */
+}
+
+textarea {
+    resize: vertical;
+    min-height: 120px; /* Adjusted minimum height */
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    height: 100vh;
-    padding: 20px;
-    box-sizing: border-box;
-  }
-  
-  .order-summary {
-    background-color: #ffffff; /* White background */
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    max-width: 400px;
-    width: 100%;
-  }
-  
-  .summary-title {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-  }
-  
-  .order-list {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .order-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid #d3d3d3;
-  }
-  
-  .order-total {
-    display: flex;
-    justify-content: space-between;
-    font-weight: bold;
-    margin-top: 10px;
-  }
-  
-  .payment-section {
-    background-color: #ffffff; /* White background */
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-    width: 100%;
-  }
-  
-  .title {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    color: #000000; /* Black */
+    margin-bottom: 12px; /* Decreased margin */
+}
+
+.item-name {
+    flex: 2; /* Increased flex for item name */
+    font-weight: 600; /* Slightly bolder */
+    color: #333333; /* Black text */
+}
+
+.item-quantity {
+    flex: 1;
     text-align: center;
-  }
-  
-  .payment-form {
-    width: 100%;
-  }
-  
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  .form-label {
-    font-size: 1rem;
-    margin-bottom: 5px;
-    color: #000000; /* Black */
-  }
-  
-  .form-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #d3d3d3;
-    border-radius: 5px;
-    box-sizing: border-box;
-  }
-  
-  .form-row {
+    color: #777777; /* Medium grey text */
+}
+
+.item-price {
+    flex: 1;
+    text-align: right;
+    color: #333333; /* Black text */
+}
+
+.order-total {
     display: flex;
     justify-content: space-between;
-  }
-  
-  .form-row .form-group {
-    width: 48%;
-  }
-  
-  .payment-icons {
+    align-items: center;
+    font-size: 20px; /* Adjusted font size */
+    font-weight: 700; /* Bolder font weight */
+    border-top: 2px solid #e0e0e0; /* Thicker grey border */
+    padding-top: 16px; /* Adjusted padding */
+    margin-top: 16px; /* Adjusted margin */
+    color: #333333; /* Black text */
+}
+
+.payment-section {
+    background-color: #f9f9f9; /* Light grey background */
+    border-radius: 16px; /* More rounded corners */
+    border: 1px solid #dcdcdc; /* Light grey border */
+    padding: 20px; /* Padding inside section */
+}
+
+.payment-icons {
     display: flex;
-    justify-content: center;
+    justify-content: space-around; /* Space around icons */
     margin: 20px 0;
-  }
-  
-  .payment-icon {
-    width: 50px;
-    margin: 0 10px;
-  }
-  
-  .submit-button {
-    background-color: #000000; /* Black background */
-    color: #ffffff; /* White text */
-    padding: 10px 20px;
+}
+
+.payment-icon {
+    width: 60px; /* Adjusted icon size */
+    height: auto;
+}
+
+
+.payment-buttons {
+    display: flex;
+    justify-content: center; /* Center align the buttons */
+    gap: 20px; /* Space between buttons */
+    margin-top: 24px; /* Space above buttons */
+}
+
+.submit-button, .cancel-button {
+    padding: 16px 32px; /* Wider padding */
     border: none;
-    border-radius: 5px;
-    font-size: 1rem;
+    border-radius: 8px; /* More rounded corners */
+    font-size: 16px; /* Adjusted font size */
     cursor: pointer;
-    width: 100%;
-    margin-top: 10px;
-  }
-  
-  .submit-button:hover {
-    background-color: #333333; /* Darker black on hover */
-  }
-  
+    height: 50px;
+    width: 160px; /* Adjusted width */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Deeper shadow */
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s; /* Smooth transitions */
+    text-align: center; /* Center align text inside button */
+    display: flex;
+    align-items: center; /* Ensure the content is vertically centered */
+    justify-content: center; /* Ensure the content is horizontally centered */
+    margin: 0; /* Ensure no additional margin is causing misalignment */
+}
+
+.submit-button {
+    background: #ffcccc; /* Background color */
+    color: #000; /* Text color */
+}
+
+.cancel-button {
+    background: #ffcccc; /* Background color */
+    color: black; /* Text color */
+}
+
+.submit-button:hover, .cancel-button:hover {
+    background: #000; /* Darker background on hover */
+    color: #ffcccc; /* Text color on hover */
+    transform: scale(1.05); /* Slightly enlarge button on hover */
+}
+
