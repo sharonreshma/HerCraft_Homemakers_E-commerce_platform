@@ -74,12 +74,14 @@
   
   .collaborator-name {
     font-size: 1.5rem; /* Increased font size for the name */
+    color: whitesmoke;
     margin: 0;
     font-weight: bold;
   }
   
   .collaborator-description {
     font-size: 1.2rem; /* Increased font size for the description */
+    color:whitesmoke;
     margin-top: 10px;
   }
   

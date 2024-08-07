@@ -1,39 +1,42 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { FaSearch, FaTrash } from 'react-icons/fa';
 
 const AdminOrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [hoveredOrderId, setHoveredOrderId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchedOrders = [
-      {
-        id: 1,
-        customer: 'John Doe',
-        items: [
-          { id: 1, name: 'Cups', category: 'Pottery', price: 250, quantity: 2 },
-          { id: 2, name: 'Modern Art', category: 'Art & Paintings', price: 1500, quantity: 1 },
-        ],
-      },
-      {
-        id: 2,
-        customer: 'Jane Smith',
-        items: [
-          { id: 3, name: 'Wall hangings', category: 'Home Decors', price: 700, quantity: 1 },
-          { id: 4, name: 'Teddy', category: 'Bouquets', price: 350, quantity: 3 },
-        ],
-      },
-    ];
-    setOrders(fetchedOrders);
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/orders'); // Ensure the URL is correct
+        setOrders(response.data);
+        setError(null); // Clear any previous errors
+      } catch (error) {
+        setError('Error fetching orders');
+        console.error('Error fetching orders:', error);
+      } finally {
+        setLoading(false); // Set loading to false when done
+      }
+    };
+
+    fetchOrders();
   }, []);
 
   const filteredOrders = orders.filter(order =>
-    order.customer.toLowerCase().includes(searchTerm.toLowerCase())
+    order.customerName?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleDeleteOrder = (orderId) => {
-    setOrders(orders.filter(order => order.id !== orderId));
+  const handleDeleteOrder = async (orderId) => {
+    try {
+      await axios.delete(`http://localhost:8080/api/orders/${orderId}`); // Ensure the URL is correct
+      setOrders(orders.filter(order => order.id !== orderId));
+    } catch (error) {
+      console.error('Error deleting order:', error);
+    }
   };
 
   const styles = {
@@ -57,22 +60,22 @@ const AdminOrdersPage = () => {
       overflow: 'hidden',
       boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
       backgroundColor: '#ffffff',
-      position: 'relative', // Ensure the search icon can be positioned correctly
+      position: 'relative',
     },
     searchBarInput: {
       flex: 1,
-      padding: '12px 20px 12px 40px', // Adjust padding to make space for the icon
+      padding: '12px 20px 12px 40px',
       border: 'none',
       outline: 'none',
       fontSize: '16px',
       color: '#333',
     },
     searchIcon: {
-      position: 'absolute', // Position the icon absolutely within the search bar
-      left: '10px', // Align the icon to the left side
-      fontSize: '16px', // Adjust the size of the icon
+      position: 'absolute',
+      left: '10px',
+      fontSize: '16px',
       color: '#333',
-      pointerEvents: 'none', // Make sure the icon doesn't interfere with clicking on the input
+      pointerEvents: 'none',
     },
     ordersContainer: {
       display: 'grid',
@@ -90,10 +93,19 @@ const AdminOrdersPage = () => {
     },
     orderHeader: {
       display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
+      flexDirection: 'column',
+      alignItems: 'flex-start',
       marginBottom: '15px',
-      color: '#000000',
+    },
+    orderId: {
+      fontSize: '18px',
+      fontWeight: 'bold',
+      marginBottom: '4px',
+      color: '#000',
+    },
+    customerName: {
+      fontSize: '16px',
+      color: '#555',
     },
     orderDetails: {
       marginTop: '10px',
@@ -134,6 +146,14 @@ const AdminOrdersPage = () => {
     },
   };
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   return (
     <div style={styles.adminOrdersPage}>
       <div style={styles.headerBar}>
@@ -150,42 +170,45 @@ const AdminOrdersPage = () => {
       </div>
 
       <div style={styles.ordersContainer}>
-        {filteredOrders.map((order) => (
-          <div
-            key={order.id}
-            style={styles.orderCard}
-            onMouseEnter={() => setHoveredOrderId(order.id)}
-            onMouseLeave={() => setHoveredOrderId(null)}
-          >
-            <div style={styles.orderHeader}>
-              <div style={{ fontWeight: 'bold' }}>Order ID: {order.id}</div>
-              <div>Customer: {order.customer}</div>
-              <button
-                style={styles.deleteButton}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = styles.deleteButtonHover.backgroundColor)}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = styles.deleteButton.backgroundColor)}
-                onClick={() => handleDeleteOrder(order.id)}
-              >
-                <FaTrash style={{ marginRight: '8px' }} />
-                Delete
-              </button>
-            </div>
-            <div style={styles.orderDetails}>
-              {order.items.map((item) => (
-                <div key={item.id} style={styles.orderItem}>
-                  <div style={styles.orderItemInfo}>
-                    <div>{item.name}</div>
-                    <div>₹{item.price}</div>
+        {filteredOrders.length === 0 ? (
+          <div>No orders found</div>
+        ) : (
+          filteredOrders.map((order) => (
+            <div
+              key={order.id}
+              style={styles.orderCard}
+              onMouseEnter={() => setHoveredOrderId(order.id)}
+              onMouseLeave={() => setHoveredOrderId(null)}
+            >
+              <div style={styles.orderHeader}>
+                <div style={styles.orderId}>Order ID: {order.orderId}</div>
+                <div style={styles.customerName}>Customer: {order.customerName}</div>
+                <button
+                  style={styles.deleteButton}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = styles.deleteButtonHover.backgroundColor)}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = styles.deleteButton.backgroundColor)}
+                  onClick={() => handleDeleteOrder(order.id)}
+                >
+                  <FaTrash style={{ marginRight: '8px' }} />
+                  Delete
+                </button>
+              </div>
+              <div style={styles.orderDetails}>
+                {order.items.map((item) => (
+                  <div key={item.id} style={styles.orderItem}>
+                    <div style={styles.orderItemInfo}>
+                      <div>{item.itemName}</div>
+                      <div>₹{item.itemPrice}</div>
+                    </div>
+                    <div style={styles.orderItemInfo}>
+                      <div>Quantity: {item.quantity}</div>
+                    </div>
                   </div>
-                  <div style={styles.orderItemInfo}>
-                    <div>Category: {item.category}</div>
-                    <div>Quantity: {item.quantity}</div>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );

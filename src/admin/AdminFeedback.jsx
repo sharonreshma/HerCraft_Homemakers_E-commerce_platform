@@ -6,16 +6,15 @@ const AdminFeedback = () => {
   const [feedbackList, setFeedbackList] = useState([]);
 
   useEffect(() => {
-    // Simulate fetching feedback with default entries
+    // Fetch feedback from the backend
     const fetchFeedback = async () => {
       try {
-        // Simulate API call with default data
-        const defaultFeedback = [
-          { id: 1, name: 'Alice Johnson', email: 'alice.johnson@example.com', message: 'Great service and support!' },
-          { id: 2, name: 'Bob Smith', email: 'bob.smith@example.com', message: 'Very satisfied with the product quality.' },
-          { id: 3, name: 'Charlie Brown', email: 'charlie.brown@example.com', message: 'The website is user-friendly and easy to navigate.' }
-        ];
-        setFeedbackList(defaultFeedback);
+        const response = await fetch('http://localhost:8080/api/contact'); // Adjust URL if needed
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setFeedbackList(data);
       } catch (error) {
         console.error('Error fetching feedback:', error);
       }
@@ -24,9 +23,21 @@ const AdminFeedback = () => {
     fetchFeedback();
   }, []);
 
-  const handleDelete = (id) => {
-    // Filter out the feedback with the given id
-    setFeedbackList(feedbackList.filter(feedback => feedback.id !== id));
+  const handleDelete = async (id) => {
+    try {
+      // Send a DELETE request to the backend to delete the feedback
+      const response = await fetch(`http://localhost:8080/api/contact/${id}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        // Update the feedback list after successful deletion
+        setFeedbackList(feedbackList.filter(feedback => feedback.id !== id));
+      } else {
+        throw new Error('Failed to delete feedback');
+      }
+    } catch (error) {
+      console.error('Error deleting feedback:', error);
+    }
   };
 
   return (
@@ -35,6 +46,7 @@ const AdminFeedback = () => {
       <table className="feedback-table">
         <thead>
           <tr>
+            <th>Id</th>
             <th>Name</th>
             <th>Email</th>
             <th>Message</th>
@@ -45,6 +57,7 @@ const AdminFeedback = () => {
           {feedbackList.length > 0 ? (
             feedbackList.map((feedback) => (
               <tr key={feedback.id}>
+                <td>{feedback.id}</td>
                 <td>{feedback.name}</td>
                 <td>{feedback.email}</td>
                 <td>{feedback.message}</td>
@@ -57,7 +70,7 @@ const AdminFeedback = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="4" className="no-feedback">No feedback available</td>
+              <td colSpan="5" className="no-feedback">No feedback available</td>
             </tr>
           )}
         </tbody>

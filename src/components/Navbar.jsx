@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { FaHome, FaInfoCircle, FaBox, FaPhone, FaUser } from 'react-icons/fa'; // Import FaUser
+import { FaHome, FaInfoCircle, FaBox, FaPhone, FaUser, FaSignOutAlt } from 'react-icons/fa';
 import '../styles/Navbar.css';
-import { AuthContext } from '../App'; // Import AuthContext
+import { AuthContext } from '../App';
 
 const Navbar = () => {
-  const { isLoggedIn, handleLogout } = useContext(AuthContext); // Use context to get isLoggedIn and handleLogout
+  const { isLoggedIn, handleLogout } = useContext(AuthContext);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light">
@@ -37,14 +37,15 @@ const Navbar = () => {
       </div>
       <div className="navbar-right">
         {isLoggedIn ? (
-          <div className="dropdown">
-            <button className="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <FaUser className="mr-2" /> Profile
+          <div className="d-flex align-items-center">
+            <Link to="/profile">
+              <button className="btn btn-outline-light mr-2">
+                <FaUser className="mr-2" /> Profile
+              </button>
+            </Link>
+            <button className="btn btn-outline-light" onClick={handleLogout}>
+              <FaSignOutAlt className="mr-2" /> Logout
             </button>
-            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <Link className="dropdown-item" to="/profile">Profile</Link>
-              <button className="dropdown-item" onClick={handleLogout}>Logout</button>
-            </div>
           </div>
         ) : (
           <>

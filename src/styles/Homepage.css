@@ -5,7 +5,11 @@
   box-sizing: border-box;
   font-family: "Pacifico", sans-serif !important;
 }
-
+body {
+  margin: 0;
+  
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
 /* Ensure images fit within their containers */
 img {
   max-width: 100%;

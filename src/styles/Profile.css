@@ -1,0 +1,104 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@400;700&display=swap');
+
+/* General Link Styling */
+a {
+  text-decoration: none; /* Removes underline */
+  color: #333; /* Dark grey color for links */
+  transition: color 0.3s ease;
+  font-family: 'Roboto', sans-serif; /* Use Roboto font */
+}
+
+a:hover {
+  color: #FFCCCC; /* Light pink color on hover */
+}
+
+/* Profile Modal */
+.profile-modal {
+  background: #ffffff; /* White background for the popup */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+  padding: 20px;
+  max-width: 500px;
+  width: 90%;
+  margin: 50px auto; /* Center the popup */
+  position: relative;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out; /* Fade-in animation */
+  font-family: 'Playfair Display', serif; /* Use Playfair Display font for elegant look */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modal Header */
+.profile-modal h1 {
+  color: #222; /* Very dark grey */
+  margin-bottom: 20px;
+  font-size: 24px; /* Classic font size for emphasis */
+  font-family: 'Playfair Display', serif; /* Elegant font for headers */
+}
+
+/* Profile Details */
+.profile-details {
+  background: #FFCCCC; /* Light pink background */
+  border: 1px solid #FFCCCC; /* Matching border color */
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  margin-bottom: 15px;
+  text-align: left;
+  font-family: 'Roboto', sans-serif; /* Use Roboto font for details */
+}
+
+/* Profile Item */
+.profile-item {
+  margin-bottom: 15px;
+}
+
+.profile-item strong {
+  color: #222; /* Dark grey for labels */
+  display: block;
+  margin-bottom: 5px;
+  font-size: 16px; /* Classic font size */
+  font-family: 'Roboto', sans-serif; /* Use Roboto font for item labels */
+}
+
+.profile-item span {
+  color: #555; /* Medium grey for text */
+  font-size: 14px; /* Slightly smaller font size */
+  font-family: 'Roboto', sans-serif; /* Use Roboto font for item text */
+}
+
+/* Action Buttons */
+.action-btn {
+  background-color: #333; /* Dark grey background */
+  border: none;
+  color: #ffffff; /* White text color */
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Roboto', sans-serif; /* Use Roboto font for buttons */
+}
+
+.action-btn:hover {
+  background-color: #555; /* Slightly lighter grey on hover */
+  transform: translateY(-1px); /* Subtle lift effect */
+}
+
+.action-btn .icon {
+  margin-right: 8px; /* Space between icon and text */
+}

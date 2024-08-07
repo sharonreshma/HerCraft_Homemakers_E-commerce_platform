@@ -1,28 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
 import { FaGoogle, FaUser, FaLock } from 'react-icons/fa';
 import login1 from '../assets/shop.jpg';
 import axios from 'axios';
+import { AuthContext } from '../App'; // Correct import for AuthContext
 
 function Login() {
   const navigate = useNavigate();
+  const { handleLogin } = useContext(AuthContext); // Use context to get handleLogin
   const [error, setError] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await axios.post('http://localhost:8080/api/auth/login', { email, password });
       const user = response.data;
-  
+
       if (user) {
+        localStorage.setItem('user', JSON.stringify(user)); // Store user data in local storage
+        handleLogin(user); // Update context with user data
         if (email === 'admin1@gmail.com') {
           navigate('/admin');
         } else {
-          navigate('/');
+          navigate('/'); // Redirect to profile page
         }
       } else {
         setError('Invalid credentials');

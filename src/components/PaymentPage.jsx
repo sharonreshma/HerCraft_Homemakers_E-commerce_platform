@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Import axios here
+import axios from 'axios';
 import '../styles/PaymentPage.css';
 import visaIcon from '../assets/visa.png';
 import mastercardIcon from '../assets/mastercard.png';
@@ -36,8 +36,26 @@ const PaymentPage = () => {
     }
   };
 
+  const validateCartItems = () => {
+    const invalidItems = cartItems.filter(item => !item.category);
+    if (invalidItems.length > 0) {
+      alert('Some items are missing a category. Please update your cart.');
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateCartItems()) return; // Validate before proceeding
+
+    const items = cartItems.map(item => ({
+      itemName: item.name,
+      itemCategory: item.category, // Provide a default value if category is missing
+      quantity: item.quantity,
+      itemPrice: item.price,
+    }));
 
     const orderData = {
       customerName: customerDetails.name,
@@ -45,11 +63,7 @@ const PaymentPage = () => {
       customerPhone: customerDetails.phone,
       customerAddress: customerDetails.address,
       totalAmount: totalAmount,
-      items: cartItems.map((item) => ({
-        itemName: item.name,
-        quantity: item.quantity,
-        itemPrice: item.price,
-      })),
+      items: items,
     };
 
     try {
@@ -131,6 +145,7 @@ const PaymentPage = () => {
             {cartItems.map((item) => (
               <div key={item.id} className="summary-item">
                 <span className="item-name">{item.name}</span>
+                <span className="item-category">({item.category || 'Unknown'})</span>
                 <span className="item-quantity">x {item.quantity}</span>
                 <span className="item-price">₹{(item.price * item.quantity).toFixed(2)}</span>
               </div>

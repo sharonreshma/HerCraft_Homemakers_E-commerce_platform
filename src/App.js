@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import HomePage from './components/Homepage';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -23,28 +23,38 @@ import User from './admin/User';
 import AdminOrdersPage from './admin/AdminOrdersPage';
 import AdminFeedback from './admin/AdminFeedback';
 import EventPage from './components/EventPage';
-import { Element } from 'react-scroll'; // Import Element
+import { Element } from 'react-scroll';
 import AdminEventPage from './admin/AdminEventPage';
 import PaymentPage from './components/PaymentPage';
 import OrderSuccess from './components/OrderSuccess';
+import Profile from './components/Profile';
 
 export const AuthContext = React.createContext();
 
 function App() {
-  
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
   return (
-    
-    <AuthContext.Provider value={{ }}>
+    <AuthContext.Provider value={{ isLoggedIn, handleLogin, handleLogout }}>
       <Router>
         <Routes>
           <Route path="/signup" element={<NoNavbar element={<SignUp />} />} />
           <Route path="/login" element={<NoNavbar element={<Login />} />} />
           <Route path="/" element={<Layout />}>
-            <Route index element={<HomePage />} />
+            <Route index element={<><HomePage /></>} />
             <Route path="about" element={<AboutPage />} />
             <Route path="contact" element={<Contact />} />
             <Route path="paymentpage" element={<PaymentPage />} />
             <Route path="ordersuccess" element={<OrderSuccess />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="product/*" element={
               <>
                 <ProductsPage />
@@ -110,8 +120,6 @@ function App() {
 
 const Layout = () => {
   const location = useLocation();
-
-  // Check if the current path is an admin route
   const isAdminRoute = location.pathname.startsWith('/admin');
 
   return (
@@ -123,8 +131,7 @@ const Layout = () => {
             <HomePage />
             <Deals />
             <Feature />
-            <EventPage /> 
-            {/* Ensure EventPage appears after Feature */}
+            <EventPage />
             <Footer />
           </>
         } />
@@ -132,10 +139,11 @@ const Layout = () => {
         <Route path="product/*" element={<><ProductsPage /><Footer/></>} />
         <Route path="contact" element={<><Contact /><Footer/></>} />
         <Route path="paymentpage" element={<PaymentPage />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="ordersuccess" element={<OrderSuccess />} />
         <Route path="admin" element={
           <>
-           <AdminNavbar />
+            <AdminNavbar />
             <AdminDashboard />
             <Footer />
           </>
@@ -148,35 +156,35 @@ const Layout = () => {
         } />
         <Route path="admin/product" element={
           <>
-           <AdminNavbar />
+            <AdminNavbar />
             <AdminProductsPage />
             <Footer />
           </>
         } />
         <Route path="admin/feedback" element={
           <>
-           <AdminNavbar />
+            <AdminNavbar />
             <AdminFeedback />
             <Footer />
           </>
         } />
         <Route path="admin/orders" element={
           <>
-           <AdminNavbar />
+            <AdminNavbar />
             <AdminOrdersPage />
             <Footer />
           </>
         } />
         <Route path="admin/events" element={
           <>
-           <AdminNavbar />
+            <AdminNavbar />
             <AdminEventPage />
             <Footer />
           </>
         } />
         <Route path="admin/users" element={
           <>
-           <AdminNavbar />
+            <AdminNavbar />
             <User />
             <Footer />
           </>
@@ -200,6 +208,7 @@ const AboutPage = () => {
     </>
   );
 };
+
 
 const NoNavbar = ({ element }) => {
   return (

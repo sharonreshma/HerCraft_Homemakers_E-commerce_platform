@@ -34,7 +34,7 @@ const User = () => {
     axios.post('http://localhost:8080/api/userregister/register', userToAdd)
       .then(response => {
         setUsers([...users, response.data]);
-        setNewUser({ username: '', email: '', password: '', role: 'User' });
+        setNewUser({ username: '', email: '', password: '' });
         setShowForm(false);
       })
       .catch(error => {
@@ -84,13 +84,7 @@ const User = () => {
               onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
               required
             />
-            <select
-              value={newUser.role}
-              onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
-            >
-              <option value="User">User</option>
-              <option value="Admin">Admin</option>
-            </select>
+           
             <button type="submit" className="adbtn adbtn-primary">Submit</button>
           </form>
         </>
@@ -102,8 +96,8 @@ const User = () => {
             <th>Username</th>
             <th>Email</th>
             <th>Password</th>
-            <th>Role</th>
-            <th>Actions</th>
+           
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -113,7 +107,7 @@ const User = () => {
               <td>{user.username}</td>
               <td>{user.email}</td>
               <td>{user.password}</td>
-              <td>{user.role || 'User'}</td>
+             
               <td>
                 <button className="adbtn adbtn-danger" onClick={() => handleDelete(user.id)}>
                   <FaTrash className="adicon" /> Delete

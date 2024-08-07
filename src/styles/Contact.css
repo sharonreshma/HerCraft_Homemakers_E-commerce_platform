@@ -117,7 +117,7 @@
 }
 
 /* Submit button styling */
-.submit-button {
+.csubmit-button {
     padding: 1rem 2rem;
     background-color: black;
     color: white;
@@ -131,7 +131,7 @@
     width: 100%;
 }
 
-.submit-button:hover {
+.csubmit-button:hover {
     color: #FFCCCC;
     transform: scale(1.05); /* Slightly scale up on hover */
 }
