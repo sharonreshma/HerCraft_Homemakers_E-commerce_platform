@@ -6,6 +6,16 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const AdminProductPage = () => {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [categories, setCategories] = useState([
+    'Pottery',
+    'Art & Paintings',
+    'Home Decors',
+    'Bouquets',
+    'Eco-Friendly Goods',
+    'Accessories'
+  ]);
+  const [selectedCategory, setSelectedCategory] = useState('All');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -14,7 +24,12 @@ const AdminProductPage = () => {
 
   useEffect(() => {
     fetchProducts();
+    fetchCategories();
   }, []);
+
+  useEffect(() => {
+    filterProducts();
+  }, [products, selectedCategory]);
 
   const fetchProducts = async () => {
     try {
@@ -22,6 +37,23 @@ const AdminProductPage = () => {
       setProducts(response.data);
     } catch (error) {
       console.error('Error fetching products:', error);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/api/products/categories'); // Adjust endpoint as needed
+      setCategories(response.data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  const filterProducts = () => {
+    if (selectedCategory === 'All') {
+      setFilteredProducts(products);
+    } else {
+      setFilteredProducts(products.filter((product) => product.category === selectedCategory));
     }
   };
 
@@ -93,6 +125,10 @@ const AdminProductPage = () => {
     }
   };
 
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+  };
+
   const styles = {
     adminPage: {
       padding: '20px',
@@ -102,6 +138,16 @@ const AdminProductPage = () => {
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
+      marginBottom: '20px',
+    },
+    headerItems: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+    filterAndAddContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '20px',
       marginBottom: '20px',
     },
     addProductButton: {
@@ -115,6 +161,17 @@ const AdminProductPage = () => {
       display: 'flex',
       alignItems: 'center',
       transition: 'background-color 0.3s ease',
+    },
+    filterLabel: {
+      marginRight: '10px',
+    },
+    filterSelect: {
+      padding: '10px',
+      borderRadius: '5px',
+      border: '1px solid #ccc',
+      fontSize: '16px',
+      outline: 'none',
+      boxShadow: '0 0 5px rgba(0,0,0,0.1)',
     },
     table: {
       width: '100%',
@@ -172,27 +229,49 @@ const AdminProductPage = () => {
       color: '#ffcccc',
       cursor: 'pointer',
     },
+    row: {
+      transition: 'background-color 0.3s ease',
+    },
+    rowHovered: {
+      backgroundColor: '#ffcccc',
+    },
   };
 
   return (
     <div style={styles.adminPage}>
       <div style={styles.headerBar}>
-        <h2>Admin Dashboard - Products</h2>
-        <button
-          style={styles.addProductButton}
-          onClick={openAddModal}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#ffcccc';
-            e.currentTarget.style.color = '#000';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = '#000';
-            e.currentTarget.style.color = '#ffcccc';
-          }}
-        >
-          <FaPlus style={{ marginRight: '5px' }} />
-          Add Product
-        </button>
+        <h2>Admin Products Dashboard</h2>
+        <div style={styles.filterAndAddContainer}>
+          <div style={styles.filterContainer}>
+            <label htmlFor="categoryFilter" style={styles.filterLabel}>Filter by Category:</label>
+            <select
+              id="categoryFilter"
+              value={selectedCategory}
+              onChange={handleCategoryChange}
+              style={styles.filterSelect}
+            >
+              <option value="All">All</option>
+              {categories.map((category) => (
+                <option key={category} value={category}>{category}</option>
+              ))}
+            </select>
+          </div>
+          <button
+            style={styles.addProductButton}
+            onClick={openAddModal}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#ffcccc';
+              e.currentTarget.style.color = '#000';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#000';
+              e.currentTarget.style.color = '#ffcccc';
+            }}
+          >
+            <FaPlus style={{ marginRight: '5px' }} />
+            Add Product
+          </button>
+        </div>
       </div>
 
       <table style={styles.table}>
@@ -207,35 +286,38 @@ const AdminProductPage = () => {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <tr
               key={product.id}
-              style={hoveredRow === product.id ? { backgroundColor: '#ffe6e6' } : {}}
+              style={{
+                ...styles.row,
+                ...(hoveredRow === product.id ? styles.rowHovered : {}),
+              }}
               onMouseEnter={() => setHoveredRow(product.id)}
               onMouseLeave={() => setHoveredRow(null)}
             >
               <td style={styles.tableCell}>{product.id}</td>
               <td style={styles.tableCell}>{product.name}</td>
               <td style={styles.tableCell}>{product.category}</td>
-              <td style={styles.tableCell}>₹{product.price}</td>
+              <td style={styles.tableCell}>{product.price}</td>
               <td style={styles.tableCell}>
-                {product.image && <img src={product.image} alt={product.name} style={styles.imagePreview} />}
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  style={styles.imagePreview}
+                />
               </td>
               <td style={styles.tableCell}>
                 <div style={styles.actionButtons}>
                   <button
                     style={{ ...styles.actionButton, ...styles.editButton }}
                     onClick={() => openEditModal(product)}
-                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#ffcccc')}
-                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#ddd')}
                   >
                     <FaEdit />
                   </button>
                   <button
                     style={{ ...styles.actionButton, ...styles.deleteButton }}
                     onClick={() => handleDeleteProduct(product.id)}
-                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#ffcccc')}
-                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#ddd')}
                   >
                     <FaTrash />
                   </button>
@@ -246,50 +328,56 @@ const AdminProductPage = () => {
         </tbody>
       </table>
 
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={() => setIsModalOpen(false)}
-        contentLabel="Product Modal"
-        style={{ content: styles.modalContent }}
-      >
-        <h2>{isEditing ? 'Edit Product' : 'Add New Product'}</h2>
+      <Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} style={{ content: styles.modalContent }}>
+        <h2>{isEditing ? 'Edit Product' : 'Add Product'}</h2>
         <input
           type="text"
           name="name"
-          placeholder="Product Name"
           value={isEditing ? selectedProduct.name : newProduct.name}
           onChange={handleInputChange}
+          placeholder="Product Name"
           style={styles.inputField}
         />
         <input
           type="text"
           name="category"
-          placeholder="Category"
           value={isEditing ? selectedProduct.category : newProduct.category}
           onChange={handleInputChange}
+          placeholder="Product Category"
           style={styles.inputField}
         />
         <input
-          type="number"
+          type="text"
           name="price"
-          placeholder="Price"
           value={isEditing ? selectedProduct.price : newProduct.price}
           onChange={handleInputChange}
+          placeholder="Product Price"
           style={styles.inputField}
         />
         <input
           type="file"
-          accept="image/*"
           onChange={handleImageChange}
           style={styles.inputField}
         />
-        {isEditing && selectedProduct.image && (
-          <img src={selectedProduct.image} alt="Product" style={styles.imagePreview} />
+        {isEditing ? (
+          <img
+            src={selectedProduct.image}
+            alt={selectedProduct.name}
+            style={styles.imagePreview}
+          />
+        ) : (
+          newProduct.image && (
+            <img
+              src={newProduct.image}
+              alt="New Product"
+              style={styles.imagePreview}
+            />
+          )
         )}
-        {!isEditing && newProduct.image && (
-          <img src={newProduct.image} alt="Product" style={styles.imagePreview} />
-        )}
-        <button style={styles.saveButton} onClick={isEditing ? handleEditProduct : handleAddProduct}>
+        <button
+          style={styles.saveButton}
+          onClick={isEditing ? handleEditProduct : handleAddProduct}
+        >
           {isEditing ? 'Save Changes' : 'Add Product'}
         </button>
       </Modal>
