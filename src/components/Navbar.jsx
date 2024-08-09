@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { FaHome, FaInfoCircle, FaBox, FaPhone, FaUser, FaSignOutAlt } from 'react-icons/fa';
+import { FaHome, FaInfoCircle, FaBox, FaPhone, FaUser, FaSignOutAlt, FaBlog } from 'react-icons/fa'; // Added FaBlog
 import '../styles/Navbar.css';
 import { AuthContext } from '../App';
 
@@ -31,6 +31,12 @@ const Navbar = () => {
           <li className="nav-item">
             <Link className="nav-link" to="/contact">
               <FaPhone className="mr-2" /> Contact
+            </Link>
+          </li>
+          {/* Added Blogs Section */}
+          <li className="nav-item">
+            <Link className="nav-link" to="/blogs">
+              <FaBlog className="mr-2" /> Blogs
             </Link>
           </li>
         </ul>

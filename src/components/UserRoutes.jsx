@@ -10,7 +10,7 @@ import About from './About';
 import Contact from './Contact';
 import ProductsPage from './Product';
 import TestimonialPage from './Testimonials';
-import Category from './Category'; // Make sure Category is used somewhere if imported
+import Category from './Category'; 
 import { Element } from 'react-scroll';
 
 const UserRoutes = () => {
@@ -35,7 +35,7 @@ const UserRoutes = () => {
       } />
       <Route path="product/*" element={<ProductsPage />} />
       <Route path="contact" element={<Contact />} />
-      <Route path="*" element={<Navigate to="/" replace />} /> {/* Fallback route */}
+      <Route path="*" element={<Navigate to="/" replace />} /> 
     </Routes>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect  } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/PaymentPage.css';
@@ -24,7 +24,17 @@ const PaymentPage = () => {
     expirationDate: '',
     cvv: '',
   });
-
+  useEffect(() => {
+    // Load user details from local storage or context
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      setCustomerDetails({
+        ...customerDetails,
+        name: user.username || '',
+        email: user.email || '',
+      });
+    }
+  }, []);
   const totalAmount = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);
 
   const handleChange = (e) => {

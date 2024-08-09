@@ -1,42 +1,25 @@
-import React, { useState } from 'react';
-import  { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from 'react-toastify';
 import Modal from 'react-modal';
 import { FaSearch, FaShoppingBag, FaPlusCircle, FaMinusCircle } from 'react-icons/fa';
-import p1 from '../assets/p1.jpg';
-import p2 from '../assets/p2.jpg';
-import p3 from '../assets/p3.webp';
-import p4 from '../assets/p4.webp';
-import e1 from '../assets/e1.jpg';
-import e2 from '../assets/e2.webp';
-import e3 from '../assets/e3.jpeg';
-import e4 from '../assets/e4.jpg';
-import a1 from '../assets/a1.jpg';
-import a2 from '../assets/a2.jpg';
-import a3 from '../assets/a3.webp';
-import a4 from '../assets/a4.jpg';
-import m1 from '../assets/m1.jpg';
-import m2 from '../assets/m2.jpg';
-import m3 from '../assets/m3.jpg';
-import m4 from '../assets/m4.jpeg';
-import hh1 from '../assets/h1.jpg';
-import hh2 from '../assets/h2.jpg';
-import hh3 from '../assets/h3.jpeg';
-import hh4 from '../assets/h4.webp';
-import b1 from '../assets/b1.jpeg';
-import b2 from '../assets/b2.jpg';
-import b3 from '../assets/b3.avif';
-import b4 from '../assets/b4.jpg';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 const ProductsPage = () => {
-  
   const [searchTerm, setSearchTerm] = useState('');
   const [cartItems, setCartItems] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [products, setProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Assuming false means logged out
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    axios.get('http://localhost:8080/api/products/getall')
+      .then(response => setProducts(response.data))
+      .catch(error => console.error('Error fetching products:', error));
+  }, []);
 
   const categories = [
     'All',
@@ -46,33 +29,6 @@ const ProductsPage = () => {
     'Bouquets',
     'Eco-Friendly Goods',
     'Accessories',
-  ];
-
-  const products = [
-    { id: 1, name: 'Cups', category: 'Pottery', price: 250, image: p3 },
-    { id: 2, name: 'Modern Art', category: 'Art & Paintings', price: 1500, image: m1 },
-    { id: 3, name: 'Wall hangings', category: 'Home Decors', price: 700, image: hh4 },
-    { id: 4, name: 'Teddy', category: 'Bouquets', price: 350, image: b3 },
-    { id: 5, name: 'Basket', category: 'Eco-Friendly Goods', price: 225, image: e2 },
-    { id: 6, name: 'Keychains', category: 'Accessories', price: 75, image: a4 },
-    { id: 7, name: 'Classic Pots', category: 'Pottery', price: 550, image: p2 },
-    { id: 8, name: 'Plate Art', category: 'Art & Paintings', price: 500, image: m2 },
-    { id: 9, name: 'Toys', category: 'Home Decors', price: 300, image: hh2 },
-    { id: 10, name: 'Flower', category: 'Bouquets', price: 315, image: b2 },
-    { id: 11, name: 'bag', category: 'Eco-Friendly Goods', price: 225, image: e3 },
-    { id: 12, name: 'hair clips', category: 'Accessories', price: 110, image: a2 },
-    { id: 13, name: 'Modern Pots', category: 'Pottery', price: 620, image: p4 },
-    { id: 14, name: 'Indian Art', category: 'Art & Paintings', price: 450, image: m3 },
-    { id: 15, name: 'Showpieces', category: 'Home Decors', price: 130, image: hh3 },
-    { id: 16, name: 'Flower Basket', category: 'Bouquets', price: 215, image: b4 },
-    { id: 17, name: 'plants', category: 'Eco-Friendly Goods', price: 125, image: e4 },
-    { id: 18, name: 'Ear rings', category: 'Accessories', price: 70, image: a3 },
-    { id: 19, name: 'Mud Pot', category: 'Pottery', price: 120, image: p1 },
-    { id: 20, name: 'Stone Art', category: 'Art & Paintings', price: 80, image: m4 },
-    { id: 21, name: 'Statues', category: 'Home Decors', price: 430, image: hh1 },
-    { id: 22, name: 'Bouquet', category: 'Bouquets', price: 215, image: b1 },
-    { id: 23, name: 'Essentials', category: 'Eco-Friendly Goods', price: 1625, image: e1 },
-    { id: 24, name: 'Key holder', category: 'Accessories', price: 106, image: a1 }
   ];
 
   const filteredProducts = products.filter(
@@ -92,12 +48,11 @@ const ProductsPage = () => {
       setCartItems(updatedCartItems);
     }
   };
-  const navigate = useNavigate();
+
   const handleCheckout = () => {
-    
-    navigate('/paymentpage',{ state: { cartItems } }); // Replace '/paymentpage' with the actual route
+    navigate('/paymentpage', { state: { cartItems } });
   };
-  
+
   const removeFromCart = (product) => {
     const productIndex = cartItems.findIndex((item) => item.id === product.id);
     if (productIndex !== -1) {
@@ -109,21 +64,6 @@ const ProductsPage = () => {
       setCartItems(updatedCartItems);
     }
   };
-  
-    const location = useLocation();
-  
-    useEffect(() => {
-      // Scroll to top when the component mounts or the location changes
-      if (location.state?.scrollToTop) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    }, [location]);
-
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // Assuming false means logged out
-
-    
-    
-  
 
   const isInCart = (product) => cartItems.some((item) => item.id === product.id);
 
@@ -341,22 +281,26 @@ const ProductsPage = () => {
     },
   };
   
+
   return (
     <div style={styles.productsPage}>
       <div style={styles.headerBar}>
         <div style={styles.searchBar}>
           <input
             type="text"
-            placeholder="Search Products"
+            placeholder="Search..."
+            style={styles.searchBarInput}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            style={styles.searchBarInput}
           />
           <FaSearch style={styles.searchIcon} />
         </div>
-        <div style={styles.cartIcon} onClick={() => setIsModalOpen(true)}>
+        <div
+          style={styles.cartIcon}
+          onClick={() => setIsModalOpen(true)}
+        >
           <FaShoppingBag />
-          {cartItems.length > 0 && <span style={styles.cartCount}>{cartItems.length}</span>}
+          <div style={styles.cartCount}>{cartItems.length}</div>
         </div>
       </div>
 
@@ -364,11 +308,12 @@ const ProductsPage = () => {
         {categories.map((category) => (
           <button
             key={category}
+            style={
+              selectedCategory === category
+                ? { ...styles.categoryButton, ...styles.categoryButtonActive }
+                : styles.categoryButton
+            }
             onClick={() => setSelectedCategory(category)}
-            style={{
-              ...styles.categoryButton,
-              ...(selectedCategory === category ? styles.categoryButtonActive : {}),
-            }}
           >
             {category}
           </button>
@@ -377,15 +322,11 @@ const ProductsPage = () => {
 
       <div style={styles.productsContainer}>
         {filteredProducts.map((product) => (
-          <div
-            key={product.id}
-            style={styles.productCard}
-            
-          >
+          <div key={product.id} style={styles.productCard}>
             <img src={product.image} alt={product.name} style={styles.productImage} />
             <div style={styles.productDetails}>
               <div style={styles.productName}>{product.name}</div>
-              <div style={styles.productPrice}>₹{product.price}</div>
+              <div style={styles.productPrice}>₹{product.price.toFixed(2)}</div>
               <button
                 onClick={() => addToCart(product)}
                 style={{
@@ -400,10 +341,15 @@ const ProductsPage = () => {
         ))}
       </div>
 
-      <Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} style={styles.cartModal}>
-        <span style={styles.modalCloseButton} onClick={() => setIsModalOpen(false)}>
-          &times;
-        </span>
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+        style={styles.cartModal}
+        contentLabel="Cart"
+      >
+        <div style={styles.modalCloseButton} onClick={() => setIsModalOpen(false)}>
+          ×
+        </div>
         <h2>Items in Bag</h2>
         <div style={styles.cartItemsContainer}>
           {cartItems.map((item) => (
@@ -411,18 +357,17 @@ const ProductsPage = () => {
               <img src={item.image} alt={item.name} style={styles.cartItemImage} />
               <div style={styles.cartItemDetails}>
                 <div style={styles.cartItemName}>{item.name}</div>
-                <div style={styles.cartItemPrice}>₹{item.price}</div>
                 <div style={styles.cartItemQuantity}>
                   <button
-                    onClick={() => removeFromCart(item)}
                     style={styles.quantityButton}
+                    onClick={() => removeFromCart(item)}
                   >
                     <FaMinusCircle />
                   </button>
                   <span>{item.quantity}</span>
                   <button
-                    onClick={() => addToCart(item)}
                     style={styles.quantityButton}
+                    onClick={() => addToCart(item)}
                   >
                     <FaPlusCircle />
                   </button>
@@ -431,17 +376,12 @@ const ProductsPage = () => {
             </div>
           ))}
         </div>
-        <div style={styles.totalPriceContainer}>
-          <div style={styles.totalPriceLabel}>Total:</div>
-          <div style={styles.totalPriceValue}>
-            ₹{cartItems.reduce((total, item) => total + item.price * item.quantity, 0)}
-          </div>
-        </div>
         <button style={styles.checkoutButton} onClick={handleCheckout}>
-      Checkout
-    </button>
-    <ToastContainer />
+          Checkout
+        </button>
       </Modal>
+
+      <ToastContainer />
     </div>
   );
 };

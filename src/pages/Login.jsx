@@ -21,12 +21,13 @@ function Login() {
       const user = response.data;
 
       if (user) {
-        localStorage.setItem('user', JSON.stringify(user)); // Store user data in local storage
-        handleLogin(user); // Update context with user data
+        localStorage.setItem('user', JSON.stringify(user)); 
+        handleLogin(user); 
+        
         if (email === 'admin1@gmail.com') {
           navigate('/admin');
         } else {
-          navigate('/'); // Redirect to profile page
+          navigate('/', { state: { username: user.username, email: user.email } }); // Pass user details
         }
       } else {
         setError('Invalid credentials');
