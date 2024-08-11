@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import { useSpring, animated } from 'react-spring';
 import { FaRegEdit, FaCalendarAlt, FaStar, FaHeart } from 'react-icons/fa';
@@ -15,28 +16,34 @@ import blog8 from '../assets/blog8.jpg';
 import blog9 from '../assets/blog9.jpg';
 
 const BlogPage = () => {
+  const [blogs, setBlogs] = useState([]);
+  const [likedPosts, setLikedPosts] = useState({});
   const fadeIn = useSpring({ opacity: 1, from: { opacity: 0 } });
 
-  // State to keep track of liked posts
-  const [likedPosts, setLikedPosts] = useState({
-    blog1: false,
-    blog2: false,
-    blog3: false,
-    blog4: false,
-    blog5: false,
-    blog6: false,
-    blog7: false,
-    blog8: false,
-    blog9: false,
-  });
+  useEffect(() => {
+    axios.get('http://localhost:8080/api/posts')
+      .then(response => {
+        setBlogs(response.data);
+        // Initialize liked posts state
+        const initialLikes = response.data.reduce((acc, blog) => {
+          acc[blog.id] = false;
+          return acc;
+        }, {});
+        setLikedPosts(initialLikes);
+      })
+      .catch(error => console.error('Error fetching blog posts:', error));
+  }, []);
 
-  // Function to handle like button click
-  const handleLikeClick = (postKey) => {
+  const handleLikeClick = (postId) => {
     setLikedPosts(prevState => ({
       ...prevState,
-      [postKey]: !prevState[postKey]
+      [postId]: !prevState[postId]
     }));
   };
+
+  const latestPosts = blogs.slice(0, 3);
+  const popularPosts = blogs.slice(3, 6);
+  const newPosts = blogs.slice(6, 14);
 
   return (
     <Container>
@@ -51,26 +58,19 @@ const BlogPage = () => {
               <FaRegEdit style={{ marginRight: '10px', color: '#FFCCCC' }} /> Latest Posts
             </SectionHeader>
             <BlogGrid>
-              {/* Blog Posts */}
-              {[{src: blog1, title: 'Handmade Jewelry: Crafting Elegance', date: 'August 15, 2024', author: 'Jane Davidson', key: 'blog1'},
-                {src: blog2, title: 'Unique Textiles: Weaving Stories', date: 'August 10, 2024', author: 'Anna Smith', key: 'blog2'},
-                {src: blog3, title: 'Top 10 Accessories You Must Have', date: 'July 30, 2024', author: 'Emily Davis', key: 'blog3'}]
-                .map(post => (
-                <BlogPost key={post.key}>
-                  <PostImage src={post.src} alt={post.title} />
+              {latestPosts.map(post => (
+                <BlogPost key={post.id}>
+                  <PostImage src={post.image || blog1} alt={post.title} />
                   <PostTitle>{post.title}</PostTitle>
                   <PostMeta>
                     <FaCalendarAlt /> {post.date}
                   </PostMeta>
                   <AuthorMeta>By {post.author}</AuthorMeta>
-                  <PostContent>
-                    {/* Description for each blog post */}
-                    Discover the artistry behind our handmade jewelry. Each piece is crafted with meticulous care, ensuring timeless beauty and elegance.
-                  </PostContent>
+                  <PostContent>{post.content}</PostContent>
                   <ActionContainer>
                     <LikeButton
-                      liked={likedPosts[post.key]}
-                      onClick={() => handleLikeClick(post.key)}
+                      liked={likedPosts[post.id]}
+                      onClick={() => handleLikeClick(post.id)}
                     >
                       <FaHeart />
                     </LikeButton>
@@ -87,26 +87,19 @@ const BlogPage = () => {
               <FaStar style={{ marginRight: '10px', color: '#FFCCCC' }} /> Popular Posts
             </AsideHeader>
             <BlogGrid>
-              {/* Popular Blog Posts */}
-              {[{src: blog9, title: 'The Craftsmanship Behind Home Decor', date: 'July 25, 2024', author: 'Sarah Johnson', key: 'blog9'},
-                {src: blog5, title: 'Sustainable Fashion Trends', date: 'July 20, 2024', author: 'Michelle Brown', key: 'blog5'},
-                {src: blog6, title: 'DIY Craft Projects for Summer', date: 'July 15, 2024', author: 'Lisa Collins', key: 'blog6'}]
-                .map(post => (
-                <BlogPost key={post.key}>
-                  <PostImage src={post.src} alt={post.title} />
+              {popularPosts.map(post => (
+                <BlogPost key={post.id}>
+                  <PostImage src={post.image || blog9} alt={post.title} />
                   <PostTitle>{post.title}</PostTitle>
                   <PostMeta>
                     <FaCalendarAlt /> {post.date}
                   </PostMeta>
                   <AuthorMeta>By {post.author}</AuthorMeta>
-                  <PostContent>
-                    {/* Description for each blog post */}
-                    Learn about the intricate craftsmanship involved in creating unique home decor pieces that add a touch of elegance and personality to any space.
-                  </PostContent>
+                  <PostContent>{post.content}</PostContent>
                   <ActionContainer>
                     <LikeButton
-                      liked={likedPosts[post.key]}
-                      onClick={() => handleLikeClick(post.key)}
+                      liked={likedPosts[post.id]}
+                      onClick={() => handleLikeClick(post.id)}
                     >
                       <FaHeart />
                     </LikeButton>
@@ -123,26 +116,19 @@ const BlogPage = () => {
               <FaRegEdit style={{ marginRight: '10px', color: '#FFCCCC' }} /> Our Blogs
             </SectionHeader>
             <BlogGrid>
-              {/* New Blog Posts */}
-              {[{src: blog7, title: 'Crafting with Recycled Materials', date: 'August 1, 2024', author: 'Karen Lee', key: 'blog7'},
-                {src: blog4, title: 'Handmade Pottery: A Timeless Art', date: 'July 28, 2024', author: 'Belicia Fernandez', key: 'blog4'},
-                {src: blog8, title: 'The Revival of Vintage Crafts', date: 'July 22, 2024', author: 'Gabriella Martinez', key: 'blog8'}]
-                .map(post => (
-                <BlogPost key={post.key}>
-                  <PostImage src={post.src} alt={post.title} />
+              {newPosts.map(post => (
+                <BlogPost key={post.id}>
+                  <PostImage src={post.image || blog7} alt={post.title} />
                   <PostTitle>{post.title}</PostTitle>
                   <PostMeta>
                     <FaCalendarAlt /> {post.date}
                   </PostMeta>
                   <AuthorMeta>By {post.author}</AuthorMeta>
-                  <PostContent>
-                    {/* Description for each blog post */}
-                    Explore innovative ways to use recycled materials in crafting. Learn about sustainable practices and how to make the most of what you have.
-                  </PostContent>
+                  <PostContent>{post.content}</PostContent>
                   <ActionContainer>
                     <LikeButton
-                      liked={likedPosts[post.key]}
-                      onClick={() => handleLikeClick(post.key)}
+                      liked={likedPosts[post.id]}
+                      onClick={() => handleLikeClick(post.id)}
                     >
                       <FaHeart />
                     </LikeButton>
@@ -222,7 +208,7 @@ const BlogGrid = styled.div`
 const BlogPost = styled.article`
   background-color: white;
   border-radius: 8px;
-  box-shadow: 0 10px 10px rgba(255, 204, 204, 0.5);
+  box-shadow: 0 5px 10px rgba(255, 204, 204, 0.5);
   padding: 15px;
 `;
 
