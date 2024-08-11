@@ -1,4 +1,4 @@
-import React, { useState,useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/PaymentPage.css';
@@ -24,6 +24,7 @@ const PaymentPage = () => {
     expirationDate: '',
     cvv: '',
   });
+
   useEffect(() => {
     // Load user details from local storage or context
     const user = JSON.parse(localStorage.getItem('user'));
@@ -35,6 +36,7 @@ const PaymentPage = () => {
       });
     }
   }, []);
+
   const totalAmount = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);
 
   const handleChange = (e) => {
@@ -55,14 +57,24 @@ const PaymentPage = () => {
     return true;
   };
 
+  const validatePaymentDetails = () => {
+    const { cardholderName, cardNumber, expirationDate, cvv } = paymentDetails;
+    if (!cardholderName || !cardNumber || !expirationDate || !cvv) {
+      alert('Please fill in all payment details.');
+      return false;
+    }
+    // Add further validation for cardNumber, expirationDate, cvv if needed
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validateCartItems()) return; // Validate before proceeding
+    if (!validateCartItems() || !validatePaymentDetails()) return; // Validate before proceeding
 
     const items = cartItems.map(item => ({
       itemName: item.name,
-      itemCategory: item.category, // Provide a default value if category is missing
+      itemCategory: item.category,
       quantity: item.quantity,
       itemPrice: item.price,
     }));
@@ -77,21 +89,41 @@ const PaymentPage = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost:8080/api/orders', orderData, {
+      // Create order
+      const orderResponse = await axios.post('http://localhost:8080/api/orders', orderData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
 
-      if (response.status === 200) {
-        const { orderId } = response.data;
-        navigate('/ordersuccess', { state: { customer: customerDetails, orderId } });
+      if (orderResponse.status === 200) {
+        const { orderId } = orderResponse.data;
+
+        // Save payment data
+        const paymentData = {
+          cardholderName: paymentDetails.cardholderName,
+          cardNumber: paymentDetails.cardNumber,
+          expirationDate: paymentDetails.expirationDate,
+          cvv: paymentDetails.cvv
+        };
+
+        const paymentResponse = await axios.post('http://localhost:8080/api/payments', paymentData, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (paymentResponse.status === 200) {
+          navigate('/ordersuccess', { state: { customer: customerDetails, orderId } });
+        } else {
+          alert('Payment failed. Please try again.');
+        }
       } else {
-        alert('Payment failed. Please try again.');
+        alert('Order creation failed. Please try again.');
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Payment failed. Please try again.');
+      alert('An error occurred. Please try again.');
     }
   };
 
@@ -115,6 +147,7 @@ const PaymentPage = () => {
                 value={customerDetails.name}
                 onChange={handleChange}
                 placeholder="Your Name"
+                required
               />
             </div>
             <div className="details-group">
@@ -126,6 +159,7 @@ const PaymentPage = () => {
                 value={customerDetails.email}
                 onChange={handleChange}
                 placeholder="example123@gmail.com"
+                required
               />
             </div>
             <div className="details-group">
@@ -137,6 +171,7 @@ const PaymentPage = () => {
                 value={customerDetails.phone}
                 onChange={handleChange}
                 placeholder="+91-AAAAA BBBBB"
+                required
               />
             </div>
             <div className="details-group">
@@ -147,6 +182,7 @@ const PaymentPage = () => {
                 value={customerDetails.address}
                 onChange={handleChange}
                 placeholder="123, New Bus Stand Road, R.S. Puram, Coimbatore, Tamil Nadu, 641002, India"
+                required
               />
             </div>
           </div>
@@ -179,6 +215,7 @@ const PaymentPage = () => {
                   value={paymentDetails.cardholderName}
                   onChange={handleChange}
                   placeholder="Cardholder's Name"
+                  required
                 />
               </div>
               <div className="form-group">
@@ -190,6 +227,7 @@ const PaymentPage = () => {
                   value={paymentDetails.cardNumber}
                   onChange={handleChange}
                   placeholder="Enter Card Number"
+                  required
                 />
               </div>
               <div className="form-row">
@@ -202,6 +240,7 @@ const PaymentPage = () => {
                     value={paymentDetails.expirationDate}
                     onChange={handleChange}
                     placeholder="MM/YY"
+                    required
                   />
                 </div>
                 <div className="form-group">
@@ -213,6 +252,7 @@ const PaymentPage = () => {
                     value={paymentDetails.cvv}
                     onChange={handleChange}
                     placeholder="123"
+                    required
                   />
                 </div>
               </div>

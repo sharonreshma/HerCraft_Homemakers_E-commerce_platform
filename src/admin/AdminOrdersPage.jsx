@@ -197,10 +197,12 @@ const AdminOrdersPage = () => {
                 {order.items.map((item) => (
                   <div key={item.id} style={styles.orderItem}>
                     <div style={styles.orderItemInfo}>
-                      <div>{item.itemName}</div>
-                      <div>₹{item.itemPrice}</div>
+                      <div>Product: {item.itemName}</div>
+                      <div>Category: {item.itemCategory}</div>
+                      
                     </div>
                     <div style={styles.orderItemInfo}>
+                    <div>Price: ₹{item.itemPrice}</div>
                       <div>Quantity: {item.quantity}</div>
                     </div>
                   </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import Modal from 'react-modal';
@@ -36,6 +37,13 @@ const ProductsPage = () => {
       (selectedCategory === 'All' || product.category === selectedCategory) &&
       product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  const { state } = useLocation();
+  useEffect(() => {
+    
+    if (state?.scrollToTop) {
+      window.scrollTo(0, 0);
+    }
+  }, [state]);
 
   const addToCart = (product) => {
     const productIndex = cartItems.findIndex((item) => item.id === product.id);
