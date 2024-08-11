@@ -222,7 +222,7 @@ const BlogGrid = styled.div`
 const BlogPost = styled.article`
   background-color: white;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 10px rgba(255, 204, 204, 0.5);
   padding: 15px;
 `;
 

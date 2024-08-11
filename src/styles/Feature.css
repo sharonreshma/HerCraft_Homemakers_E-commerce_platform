@@ -78,7 +78,8 @@
   }
   
   .explore-button:hover {
-    background-color: #FFCCCC; /* Darker shade of black on hover */
+    background-color: #000;
+    color:#FFCCCC;
   }
   
   /* Optional: Style slick slider arrows */
