@@ -1,308 +1,523 @@
 import React, { useState, useEffect } from 'react';
-import {
-  FaCreditCard,
-  FaPaypal,
-  FaUniversity,
-  FaPlusCircle,
-  FaListAlt,
-  FaCalendarAlt,
-  FaTrash,
-} from 'react-icons/fa';
-import '../styles/AdminEventPage.css';
-
-const initialEvents = [
-  {
-    id: 1,
-    title: 'Handicraft Sale Extravaganza',
-    date: 'August 15, 2024',
-    description: 'Join us for an exciting sale on a wide range of unique handicrafts.',
-    image: 'path_to_image1',
-    price: 10,
-    icon: <FaCalendarAlt className="icon-event" />,
-    users: [
-      { id: 1, name: 'John Doe', email: 'john.doe@example.com', contact: '123-456-7890', paymentMethod: 'Credit Card' },
-      { id: 2, name: 'Jane Smith', email: 'jane.smith@example.com', contact: '987-654-3210', paymentMethod: 'PayPal' },
-    ],
-  },
-  {
-    id: 2,
-    title: 'Business Tips for Craft Entrepreneurs',
-    date: 'August 22, 2024',
-    description: 'A special talk on effective business strategies and tips for handicraft entrepreneurs.',
-    image: 'path_to_image2',
-    price: 15,
-    icon: <FaCalendarAlt className="icon-event" />,
-    users: [
-      { id: 3, name: 'Alice Johnson', email: 'alice.johnson@example.com', contact: '111-222-3333', paymentMethod: 'Bank Transfer' },
-      { id: 4, name: 'Bob Brown', email: 'bob.brown@example.com', contact: '444-555-6666', paymentMethod: 'Credit Card' },
-    ],
-  },
-  {
-    id: 3,
-    title: 'My Journey as an Entrepreneur',
-    date: 'August 29, 2024',
-    description: 'An inspiring journey of Sita, founder of JustCraft.',
-    image: 'path_to_image3',
-    price: 20,
-    icon: <FaCalendarAlt className="icon-event" />,
-    users: [
-      { id: 5, name: 'Charlie Williams', email: 'charlie.williams@example.com', contact: '777-888-9999', paymentMethod: 'PayPal' },
-      { id: 6, name: 'Diana Wilson', email: 'diana.wilson@example.com', contact: '000-111-2222', paymentMethod: 'Bank Transfer' },
-    ],
-  },
-];
+import axios from 'axios';
+import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
+import Modal from 'react-modal';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AdminEventPage = () => {
-  const [events, setEvents] = useState(initialEvents);
+  const [events, setEvents] = useState([]);
+  const [eventNameFilter, setEventNameFilter] = useState('');
+  const [filteredEvents, setFilteredEvents] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+  const [isEditingEvent, setIsEditingEvent] = useState(false);
+  const [isEditingUser, setIsEditingUser] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [showForm, setShowForm] = useState(false);
-  const [registrationSuccess, setRegistrationSuccess] = useState(false);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
   const [newEvent, setNewEvent] = useState({
-    title: '',
-    date: '',
-    description: '',
-    image: '',
-    price: '',
+    id: null, title: '', date: '', description: '', image: '', price: ''
   });
-  const [registeredUsers, setRegisteredUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [newUser, setNewUser] = useState({
+    id: null, name: '', email: '', phone: '',event_name:'', paymentMethod: ''
+  });
+  const [hoveredRow, setHoveredRow] = useState(null);
 
   useEffect(() => {
-    // Fetch initial list of users or use default users from events
-    const users = events.flatMap(event => event.users);
-    setRegisteredUsers(users);
-  }, [events]);
+    fetchEvents();
+    fetchUsers();
+  }, []);
 
-  const handleRegisterClick = (event) => {
+  useEffect(() => {
+    filterEvents();
+  }, [events, selectedCategory]);
+
+  useEffect(() => {
+    filterUsers();
+  }, [users, eventNameFilter]);
+
+  const fetchEvents = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/api/events');
+      setEvents(response.data);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    }
+  };
+  const handleEventNameFilterChange = (e) => {
+    setEventNameFilter(e.target.value);
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/api/users');
+      setUsers(response.data);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
+
+  const filterEvents = () => {
+    // Implement filtering logic if needed
+    setFilteredEvents(events);
+  };
+
+  const filterUsers = () => {
+    const filtered = users.filter(user =>
+      user.eventName.toLowerCase().includes(eventNameFilter.toLowerCase())
+    );
+    setFilteredUsers(filtered);
+  };
+  
+
+  const handleAddEvent = async () => {
+    try {
+      const response = await axios.post('http://localhost:8080/api/events', newEvent);
+      setEvents([...events, response.data]);
+      setNewEvent({ id: null, title: '', date: '', description: '', image: '', price: '' });
+      setIsEventModalOpen(false);
+    } catch (error) {
+      console.error('Error adding event:', error);
+    }
+  };
+
+  const handleEditEvent = async () => {
+    try {
+      const response = await axios.put(`http://localhost:8080/api/events/${selectedEvent.id}`, selectedEvent);
+      setEvents(events.map((event) => (event.id === response.data.id ? response.data : event)));
+      setSelectedEvent(null);
+      setIsEditingEvent(false);
+      setIsEventModalOpen(false);
+    } catch (error) {
+      console.error('Error updating event:', error);
+    }
+  };
+
+  const handleDeleteEvent = async (eventId) => {
+    try {
+      await axios.delete(`http://localhost:8080/api/events/${eventId}`);
+      setEvents(events.filter((event) => event.id !== eventId));
+    } catch (error) {
+      console.error('Error deleting event:', error);
+    }
+  };
+
+  const handleAddUser = async () => {
+    try {
+      const response = await axios.post('http://localhost:8080/api/users/register', newUser);
+      setUsers([...users, response.data]);
+      setNewUser({ id: null, name: '', email: '', phone: '',event_name:'', paymentMethod: '' });
+      setIsUserModalOpen(false);
+    } catch (error) {
+      console.error('Error adding user:', error);
+    }
+  };
+
+  const handleEditUser = async () => {
+    try {
+      const response = await axios.put(`http://localhost:8080/api/users/${selectedUser.id}`, selectedUser);
+      setUsers(users.map((user) => (user.id === response.data.id ? response.data : user)));
+      setSelectedUser(null);
+      setIsEditingUser(false);
+      setIsUserModalOpen(false);
+    } catch (error) {
+      console.error('Error updating user:', error);
+    }
+  };
+
+  const handleDeleteUser = async (userId) => {
+    try {
+      await axios.delete(`http://localhost:8080/api/users/${userId}`);
+      setUsers(users.filter((user) => user.id !== userId));
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
+  };
+
+  const openEditEventModal = (event) => {
     setSelectedEvent(event);
-    setShowForm(true);
-    setRegistrationSuccess(false);
+    setIsEditingEvent(true);
+    setIsEventModalOpen(true);
   };
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    handlePayment();
+  const openAddEventModal = () => {
+    setNewEvent({ id: null, title: '', date: '', description: '', image: '', price: '' });
+    setIsEditingEvent(false);
+    setIsEventModalOpen(true);
   };
 
-  const handlePayment = () => {
-    if (selectedPaymentMethod) {
-      setRegistrationSuccess(true);
+  const openEditUserModal = (user) => {
+    setSelectedUser(user);
+    setIsEditingUser(true);
+    setIsUserModalOpen(true);
+  };
+
+  const openAddUserModal = () => {
+    setNewUser({ id: null, name: '', email: '', phone: '',event_name:'', paymentMethod: '' });
+    setIsEditingUser(false);
+    setIsUserModalOpen(true);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if (isEditingEvent) {
+      setSelectedEvent({ ...selectedEvent, [name]: value });
+    } else if (isEditingUser) {
+      setSelectedUser({ ...selectedUser, [name]: value });
     } else {
-      alert('Please select a payment method.');
+      setNewEvent({ ...newEvent, [name]: value });
+      setNewUser({ ...newUser, [name]: value });
     }
   };
 
-  const handleCloseSuccessMessage = () => {
-    setRegistrationSuccess(false);
-    setShowForm(false);
-  };
-
-  const handleAddEvent = (e) => {
-    e.preventDefault();
-    const newEventWithId = {
-      ...newEvent,
-      id: events.length + 1,
-      icon: <FaCalendarAlt className="icon-event" />,
-      users: [], // No users initially
-    };
-    setEvents([...events, newEventWithId]);
-    setNewEvent({
-      title: '',
-      date: '',
-      description: '',
-      image: '',
-      price: '',
-    });
-  };
-
-  const handleDeleteEvent = (id) => {
-    setEvents(events.filter(event => event.id !== id));
-  };
-
-  const handleSortUsersByEvent = (eventId) => {
-    const event = events.find(event => event.id === eventId);
-    if (event) {
-      setRegisteredUsers(event.users);
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (isEditingEvent) {
+          setSelectedEvent({ ...selectedEvent, image: reader.result });
+        } else {
+          setNewEvent({ ...newEvent, image: reader.result });
+        }
+      };
+      reader.readAsDataURL(file);
     }
+  };
+
+  const styles = {
+    adminPage: {
+      padding: '20px',
+      backgroundColor: 'white',
+    },
+    headerBar: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: '20px',
+    },
+    sectionHeader: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: '20px',
+    },
+    filterAndAddContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '20px',
+      marginBottom: '20px',
+    },
+    addProductButton: {
+      padding: '10px 15px',
+      border: 'none',
+      borderRadius: '5px',
+      backgroundColor: '#000',
+      color: '#ffcccc',
+      cursor: 'pointer',
+      fontSize: '16px',
+      display: 'flex',
+      alignItems: 'center',
+      transition: 'background-color 0.3s ease',
+    },
+    table: {
+      width: '100%',
+      borderCollapse: 'collapse',
+      marginBottom: '20px',
+    },
+    tableHeader: {
+      backgroundColor: '#f2f2f2',
+      textAlign: 'left',
+      padding: '10px',
+    },
+    tableCell: {
+      padding: '10px',
+      borderBottom: '1px solid #ddd',
+    },
+    actionButtons: {
+      display: 'flex',
+      gap: '10px',
+    },
+    actionButton: {
+      padding: '5px 10px',
+      border: 'none',
+      borderRadius: '5px',
+      cursor: 'pointer',
+      transition: 'background-color 0.3s ease',
+      backgroundColor: '#000',
+      color: '#ffcccc',
+    },
+    editButton: {},
+    deleteButton: {},
+    modalContent: {
+      padding: '20px',
+      backgroundColor: '#fff',
+      borderRadius: '10px',
+      width: '50%',
+      margin: '0 auto',
+    },
+    inputField: {
+      width: '100%',
+      padding: '10px',
+      margin: '10px 0',
+      borderRadius: '5px',
+      border: '1px solid #ccc',
+    },
+    imagePreview: {
+      width: '100px',
+      height: '100px',
+      objectFit: 'cover',
+      margin: '10px 0',
+    },
+    modalButton: {
+      padding: '10px 15px',
+      border: 'none',
+      borderRadius: '5px',
+      backgroundColor: '#000',
+      color: '#ffcccc',
+      cursor: 'pointer',
+      fontSize: '16px',
+      marginRight: '10px',
+    },
   };
 
   return (
-    <div className="admin-event-page-container">
-      <h1 className="admin-header">Admin Events Dashboard</h1>
+    <div style={styles.adminPage}>
+      <div style={styles.headerBar}>
+        <h1>Admin Page</h1>
+      </div>
 
-      <section className="add-event-form-container">
-        <h2><FaPlusCircle /> Add New Event</h2>
-        <form className="add-event-form" onSubmit={handleAddEvent}>
-          <label htmlFor="event-title">Title:</label>
-          <input
-            type="text"
-            id="event-title"
-            value={newEvent.title}
-            onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
-            required
-          />
-
-          <label htmlFor="event-date">Date:</label>
-          <input
-            type="date"
-            id="event-date"
-            value={newEvent.date}
-            onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
-            required
-          />
-
-          <label htmlFor="event-description">Description:</label>
-          <textarea
-            id="event-description"
-            value={newEvent.description}
-            onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
-            required
-          ></textarea>
-
-          <label htmlFor="event-image">Image URL:</label>
-          <input
-            type="text"
-            id="event-image"
-            value={newEvent.image}
-            onChange={(e) => setNewEvent({ ...newEvent, image: e.target.value })}
-            required
-          />
-
-          <label htmlFor="event-price">Price:</label>
-          <input
-            type="number"
-            id="event-price"
-            value={newEvent.price}
-            onChange={(e) => setNewEvent({ ...newEvent, price: e.target.value })}
-            required
-          />
-
-          <button type="submit" className="adevbtn-primary">
-            Add Event
-          </button>
-        </form>
-      </section>
-
-      {showForm && !registrationSuccess && (
-        <div className="adregistration-form-container">
-          <h2>Register for {selectedEvent.title}</h2>
-          <form className="registration-form" onSubmit={handleFormSubmit}>
-            <label htmlFor="name">Name:</label>
-            <input type="text" id="name" required />
-
-            <label htmlFor="email">Email:</label>
-            <input type="email" id="email" required />
-
-            <label htmlFor="contact">Contact Number:</label>
-            <input type="text" id="contact" required />
-
-            <h3>Payment Method</h3>
-            <div className="payment-method-options">
-              <label>
-                <input
-                  type="radio"
-                  value="Credit Card"
-                  checked={selectedPaymentMethod === 'Credit Card'}
-                  onChange={() => setSelectedPaymentMethod('Credit Card')}
-                />
-                <FaCreditCard /> Credit Card
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  value="PayPal"
-                  checked={selectedPaymentMethod === 'PayPal'}
-                  onChange={() => setSelectedPaymentMethod('PayPal')}
-                />
-                <FaPaypal /> PayPal
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  value="Bank Transfer"
-                  checked={selectedPaymentMethod === 'Bank Transfer'}
-                  onChange={() => setSelectedPaymentMethod('Bank Transfer')}
-                />
-                <FaUniversity /> Bank Transfer
-              </label>
-            </div>
-
-            <button type="submit" className="adevbtn-primary">
-              Register
-            </button>
-          </form>
-        </div>
-      )}
-
-      {registrationSuccess && (
-        <div className="adregistration-success">
-          <h2>Registration Successful!</h2>
-          <p>Thank you for registering. We look forward to seeing you at the event!</p>
-          <button className="adevbtn-primary" onClick={handleCloseSuccessMessage}>
-            Close
-          </button>
-        </div>
-      )}
-
-      <section className="aduser-list-container">
-        <h2><FaListAlt /> Registered Users</h2>
-        <div>
-          <label>Sort by Event: </label>
-          <select onChange={(e) => handleSortUsersByEvent(Number(e.target.value))}>
-            <option value="">All Users</option>
-            {events.map((event) => (
-              <option key={event.id} value={event.id}>
-                {event.title}
-              </option>
-            ))}
-          </select>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Contact Number</th>
-              <th>Payment Method</th>
+      <div style={styles.sectionHeader}>
+        <h2>Events</h2>
+        <button style={styles.addProductButton} onClick={openAddEventModal}>
+          <FaPlus style={{ marginRight: '5px' }} /> Add Event
+        </button>
+      </div>
+      <table style={styles.table}>
+        <thead>
+          <tr>
+            <th style={styles.tableHeader}>Title</th>
+            <th style={styles.tableHeader}>Date</th>
+            <th style={styles.tableHeader}>Description</th>
+            <th style={styles.tableHeader}>Image</th>
+            <th style={styles.tableHeader}>Price</th>
+            <th style={styles.tableHeader}>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredEvents.map((event) => (
+            <tr
+              key={event.id}
+              onMouseEnter={() => setHoveredRow(event.id)}
+              onMouseLeave={() => setHoveredRow(null)}
+            >
+              <td style={styles.tableCell}>{event.title}</td>
+              <td style={styles.tableCell}>{event.date}</td>
+              <td style={styles.tableCell}>{event.description}</td>
+              <td style={styles.tableCell}>
+                <img src={event.image} alt={event.title} style={styles.imagePreview} />
+              </td>
+              <td style={styles.tableCell}>{event.price}</td>
+              <td style={styles.tableCell}>
+                <div style={styles.actionButtons}>
+                  <button
+                    style={{ ...styles.actionButton, ...styles.editButton }}
+                    onClick={() => openEditEventModal(event)}
+                    disabled={hoveredRow !== event.id}
+                  >
+                    <FaEdit />
+                  </button>
+                  <button
+                    style={{ ...styles.actionButton, ...styles.deleteButton }}
+                    onClick={() => handleDeleteEvent(event.id)}
+                    disabled={hoveredRow !== event.id}
+                  >
+                    <FaTrash />
+                  </button>
+                </div>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {registeredUsers.map((user) => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.contact}</td>
-                <td>{user.paymentMethod}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
-
-      <section className="adevent-list-container">
-        <h2><FaListAlt /> Events</h2>
-        <div className="adevent-list">
-          {events.map((event) => (
-            <div className="adevent-card" key={event.id}>
-              <div className="adevent-icon">{event.icon}</div>
-              <div className="adevent-info">
-                <h3>{event.title}</h3>
-                <p>{event.date}</p>
-                <p>{event.description}</p>
-                <p>Price: ₹{event.price}</p>
-              </div>
-              <div className="adevent-actions">
-                
-                <button className="adevbtn-delete" onClick={() => handleDeleteEvent(event.id)}>
-                  <FaTrash /> Delete
-                </button>
-              </div>
-            </div>
           ))}
-        </div>
-      </section>
+        </tbody>
+      </table>
+
+      <div style={styles.sectionHeader}>
+        <h2>Users</h2>
+        <button style={styles.addProductButton} onClick={openAddUserModal}>
+          <FaPlus style={{ marginRight: '5px' }} /> Add User
+        </button>
+      </div>
+      
+      <table style={styles.table}>
+        <thead>
+          
+          <tr>
+            <th style={styles.tableHeader}>Name</th>
+            <th style={styles.tableHeader}>Email</th>
+            <th style={styles.tableHeader}>Phone</th>
+            <th style={styles.tableHeader}>Event Name</th>
+            <th style={styles.tableHeader}>Payment Method</th>
+            <th style={styles.tableHeader}>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredUsers.map((user) => (
+            <tr
+              key={user.id}
+              onMouseEnter={() => setHoveredRow(user.id)}
+              onMouseLeave={() => setHoveredRow(null)}
+            >
+              <td style={styles.tableCell}>{user.name}</td>
+              <td style={styles.tableCell}>{user.email}</td>
+              <td style={styles.tableCell}>{user.phone}</td>
+              <td style={styles.tableCell}>{user.eventName}</td>
+              <td style={styles.tableCell}>{user.paymentMethod}</td>
+              <td style={styles.tableCell}>
+                <div style={styles.actionButtons}>
+                  <button
+                    style={{ ...styles.actionButton, ...styles.editButton }}
+                    onClick={() => openEditUserModal(user)}
+                    disabled={hoveredRow !== user.id}
+                  >
+                    <FaEdit />
+                  </button>
+                  <button
+                    style={{ ...styles.actionButton, ...styles.deleteButton }}
+                    onClick={() => handleDeleteUser(user.id)}
+                    disabled={hoveredRow !== user.id}
+                  >
+                    <FaTrash />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {/* Event Modal */}
+      <Modal
+        isOpen={isEventModalOpen}
+        onRequestClose={() => setIsEventModalOpen(false)}
+        contentLabel="Event Modal"
+        style={styles.modalContent}
+      >
+        <h2>{isEditingEvent ? 'Edit Event' : 'Add Event'}</h2>
+        <input
+          type="text"
+          name="title"
+          value={isEditingEvent ? selectedEvent.title : newEvent.title}
+          onChange={handleInputChange}
+          placeholder="Event Title"
+          style={styles.inputField}
+        />
+        <input
+          type="date"
+          name="date"
+          value={isEditingEvent ? selectedEvent.date : newEvent.date}
+          onChange={handleInputChange}
+          style={styles.inputField}
+        />
+        <textarea
+          name="description"
+          value={isEditingEvent ? selectedEvent.description : newEvent.description}
+          onChange={handleInputChange}
+          placeholder="Event Description"
+          style={styles.inputField}
+        />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+        />
+        {isEditingEvent && selectedEvent.image && (
+          <img src={selectedEvent.image} alt="Event Preview" style={styles.imagePreview} />
+        )}
+        <input
+          type="text"
+          name="price"
+          value={isEditingEvent ? selectedEvent.price : newEvent.price}
+          onChange={handleInputChange}
+          placeholder="Event Price"
+          style={styles.inputField}
+        />
+        <button
+          style={styles.modalButton}
+          onClick={isEditingEvent ? handleEditEvent : handleAddEvent}
+        >
+          {isEditingEvent ? 'Update Event' : 'Add Event'}
+        </button>
+        <button
+          style={styles.modalButton}
+          onClick={() => setIsEventModalOpen(false)}
+        >
+          Cancel
+        </button>
+      </Modal>
+
+      {/* User Modal */}
+      <Modal
+        isOpen={isUserModalOpen}
+        onRequestClose={() => setIsUserModalOpen(false)}
+        contentLabel="User Modal"
+        style={styles.modalContent}
+      >
+        <h2>{isEditingUser ? 'Edit User' : 'Add User'}</h2>
+        <input
+          type="text"
+          name="name"
+          value={isEditingUser ? selectedUser.name : newUser.name}
+          onChange={handleInputChange}
+          placeholder="User Name"
+          style={styles.inputField}
+        />
+        <input
+          type="email"
+          name="email"
+          value={isEditingUser ? selectedUser.email : newUser.email}
+          onChange={handleInputChange}
+          placeholder="User Email"
+          style={styles.inputField}
+        />
+        <input
+          type="tel"
+          name="phone"
+          value={isEditingUser ? selectedUser.phone : newUser.phone}
+          onChange={handleInputChange}
+          placeholder="User Phone"
+          style={styles.inputField}
+        />
+        <input
+    type="text"
+    name="event_name"
+    value={isEditingUser ? selectedUser.event_name : newUser.event_name}
+    onChange={handleInputChange}
+    placeholder="Event Name"
+    style={styles.inputField}
+  />
+        <input
+          type="text"
+          name="paymentMethod"
+          value={isEditingUser ? selectedUser.paymentMethod : newUser.paymentMethod}
+          onChange={handleInputChange}
+          placeholder="Payment Method"
+          style={styles.inputField}
+        />
+        <button
+          style={styles.modalButton}
+          onClick={isEditingUser ? handleEditUser : handleAddUser}
+        >
+          {isEditingUser ? 'Update User' : 'Add User'}
+        </button>
+        <button
+          style={styles.modalButton}
+          onClick={() => setIsUserModalOpen(false)}
+        >
+          Cancel
+        </button>
+      </Modal>
     </div>
   );
 };

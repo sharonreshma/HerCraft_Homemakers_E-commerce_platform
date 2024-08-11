@@ -28,6 +28,8 @@ import AdminEventPage from './admin/AdminEventPage';
 import PaymentPage from './components/PaymentPage';
 import OrderSuccess from './components/OrderSuccess';
 import Profile from './components/Profile';
+import BlogPage from './components/Blog';
+import AdminBlogPage from './admin/AdminBlogPage';
 
 export const AuthContext = React.createContext();
 
@@ -51,6 +53,7 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<><HomePage /></>} />
             <Route path="about" element={<AboutPage />} />
+            <Route path="/blogs" element={<BlogPage />} />
             <Route path="contact" element={<Contact />} />
             <Route path="paymentpage" element={<PaymentPage />} />
             <Route path="ordersuccess" element={<OrderSuccess />} />
@@ -103,6 +106,13 @@ function App() {
                 <Footer />
               </>
             } />
+            <Route path="admin/blogs" element={
+              <>
+                <AdminNavbar />
+                <AdminBlogPage />
+                <Footer />
+              </>
+            } />
             <Route path="admin/events" element={
               <>
                 <AdminNavbar />
@@ -136,6 +146,7 @@ const Layout = () => {
           </>
         } />
         <Route path="about" element={<AboutPage />} />
+        <Route path="/blogs" element={<><BlogPage /><Footer/></>} />
         <Route path="product/*" element={<><ProductsPage /><Footer/></>} />
         <Route path="contact" element={<><Contact /><Footer/></>} />
         <Route path="paymentpage" element={<PaymentPage />} />
@@ -158,6 +169,13 @@ const Layout = () => {
           <>
             <AdminNavbar />
             <AdminProductsPage />
+            <Footer />
+          </>
+        } />
+         <Route path="admin/blogs" element={
+          <>
+            <AdminNavbar />
+            <AdminBlogPage />
             <Footer />
           </>
         } />

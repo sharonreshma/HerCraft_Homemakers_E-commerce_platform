@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaCreditCard, FaPaypal, FaUniversity } from 'react-icons/fa';
 import '../styles/EventPage.css';
@@ -6,34 +6,11 @@ import handicraftSaleImg from '../assets/hc.jpeg';
 import businessTipsImg from '../assets/bus.jpg';
 import entrepreneurJourneyImg from '../assets/entr.jpg';
 
-const events = [
-  {
-    id: 1,
-    title: 'Handicraft Sale Extravaganza',
-    date: 'August 15, 2024',
-    description: 'Join us for an exciting sale on a wide range of unique handicrafts. Enjoy exclusive discounts and find the perfect handmade items for yourself or as gifts.',
-    image: handicraftSaleImg,
-    price: 10,
-  },
-  {
-    id: 2,
-    title: 'Business Tips for Craft Entrepreneurs',
-    date: 'August 22, 2024',
-    description: 'A special talk on effective business strategies and tips for handicraft entrepreneurs. Learn from industry experts and elevate your business game.',
-    image: businessTipsImg,
-    price: 15,
-  },
-  {
-    id: 3,
-    title: 'My Journey as an Entrepreneur',
-    date: 'August 29, 2024',
-    description: 'An inspiring journey of Sita, founder of JustCraft, where she will share key challenges, successes, and insights from her experience.',
-    image: entrepreneurJourneyImg,
-    price: 20,
-  },
-];
+// Define a default image to use when none is available
+const defaultImage = 'path/to/default/image.jpg';
 
 const EventPage = () => {
+  const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
@@ -42,10 +19,29 @@ const EventPage = () => {
     name: '',
     email: '',
     phone: '',
+    eventName: '', // Add eventName to the formData
   });
+
+  // Fetch event data from the backend when the component mounts
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/events');
+        setEvents(response.data);
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   const handleRegisterClick = (event) => {
     setSelectedEvent(event);
+    setFormData({
+      ...formData,
+      eventName: event.title, // Set eventName when an event is selected
+    });
     setShowForm(true);
     setRegistrationSuccess(false);
   };
@@ -87,25 +83,29 @@ const EventPage = () => {
     <div className="event-page-container">
       <h1 className="event-header">Upcoming Events</h1>
       <div className="event-list">
-        {events.map((event) => (
-          <div key={event.id} className="event-card">
-            <img
-              src={event.image}
-              alt={event.title}
-              className={`event-image ${event.id === 3 ? 'event-image-entrepreneur' : ''}`}
-            />
-            <h2 className="event-title">{event.title}</h2>
-            <p className="event-date">{event.date}</p>
-            <p className="event-description">{event.description}</p>
-            <p className="event-price">Price: ₹{event.price}</p>
-            <button
-              className="evbtn-primary"
-              onClick={() => handleRegisterClick(event)}
-            >
-              Register Now
-            </button>
-          </div>
-        ))}
+        {events.length > 0 ? (
+          events.map((event) => (
+            <div key={event.id} className="event-card">
+              <img
+                src={event.image || defaultImage}
+                alt={event.title}
+                className={`event-image ${event.id === 3 ? 'event-image-entrepreneur' : ''}`}
+              />
+              <h2 className="event-title">{event.title}</h2>
+              <p className="event-date">{event.date}</p>
+              <p className="event-description">{event.description}</p>
+              <p className="event-price">Price: ₹{event.price}</p>
+              <button
+                className="evbtn-primary"
+                onClick={() => handleRegisterClick(event)}
+              >
+                Register Now
+              </button>
+            </div>
+          ))
+        ) : (
+          <p>No events available at the moment.</p>
+        )}
       </div>
 
       {showForm && !registrationSuccess && (
@@ -140,6 +140,15 @@ const EventPage = () => {
               value={formData.phone}
               onChange={handleFormChange}
               required
+            />
+
+            <label htmlFor="event-name">Event Name:</label>
+            <input
+              type="text"
+              id="event-name"
+              name="eventName"
+              value={formData.eventName}
+              readOnly
             />
 
             <label htmlFor="payment-method">Choose Payment Method:</label>

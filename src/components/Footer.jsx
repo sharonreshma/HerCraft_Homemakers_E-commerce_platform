@@ -51,7 +51,7 @@ export default function Footer() {
         component="footer"
         sx={{
           borderTop: (theme) => `1px solid ${theme.palette.divider}`,
-          mt: 8,
+          mt: 1,
           py: [3, 6],
           backgroundColor: "black",
           opacity: 70,

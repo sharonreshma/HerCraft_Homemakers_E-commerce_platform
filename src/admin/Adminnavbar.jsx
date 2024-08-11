@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { FaHome, FaUser, FaBox, FaList, FaCalendar, FaEnvelope, FaPhone } from 'react-icons/fa'; // Import additional icons
+import { FaHome, FaUser, FaBox, FaList, FaCalendar, FaEnvelope, FaPhone, FaBlog } from 'react-icons/fa'; // Import additional icons
 import '../styles/Adminnavbar.css'; // Ensure this CSS file exists with your styles
 
 const AdminNavbar = () => {
@@ -46,10 +46,16 @@ const AdminNavbar = () => {
             </Link>
           </li>
           <li className="nav-item">
+            <Link className="nav-link" to="/admin/blogs">
+              <FaBlog className="mr-2" /> Blogs
+            </Link>
+          </li>
+          <li className="nav-item">
             <Link className="nav-link" to="/admin/feedback">
               <FaEnvelope className="mr-2" /> Feedback
             </Link>
           </li>
+         
         </ul>
       </div>
       <div className="navbar-right">
