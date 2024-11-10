@@ -12,14 +12,14 @@ const AdminOrdersPage = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/orders'); // Ensure the URL is correct
+        const response = await axios.get('http://localhost:8080/api/orders'); 
         setOrders(response.data);
-        setError(null); // Clear any previous errors
+        setError(null); 
       } catch (error) {
         setError('Error fetching orders');
         console.error('Error fetching orders:', error);
       } finally {
-        setLoading(false); // Set loading to false when done
+        setLoading(false); 
       }
     };
 

@@ -6,7 +6,6 @@ import handicraftSaleImg from '../assets/hc.jpeg';
 import businessTipsImg from '../assets/bus.jpg';
 import entrepreneurJourneyImg from '../assets/entr.jpg';
 
-// Define a default image to use when none is available
 const defaultImage = 'path/to/default/image.jpg';
 
 const EventPage = () => {
@@ -19,10 +18,10 @@ const EventPage = () => {
     name: '',
     email: '',
     phone: '',
-    eventName: '', // Add eventName to the formData
+    eventName: '', 
   });
 
-  // Fetch event data from the backend when the component mounts
+
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -40,7 +39,7 @@ const EventPage = () => {
     setSelectedEvent(event);
     setFormData({
       ...formData,
-      eventName: event.title, // Set eventName when an event is selected
+      eventName: event.title, 
     });
     setShowForm(true);
     setRegistrationSuccess(false);

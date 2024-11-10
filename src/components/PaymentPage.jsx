@@ -89,7 +89,7 @@ const PaymentPage = () => {
     };
 
     try {
-      // Create order
+    
       const orderResponse = await axios.post('http://localhost:8080/api/orders', orderData, {
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ const PaymentPage = () => {
       if (orderResponse.status === 200) {
         const { orderId } = orderResponse.data;
 
-        // Save payment data
+        
         const paymentData = {
           cardholderName: paymentDetails.cardholderName,
           cardNumber: paymentDetails.cardNumber,

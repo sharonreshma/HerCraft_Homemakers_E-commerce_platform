@@ -74,7 +74,7 @@ const BlogPage = () => {
                     >
                       <FaHeart />
                     </LikeButton>
-                    <ReadMoreButton href="#">Read More</ReadMoreButton>
+                    <ReadMoreButton href="/blog-post">Read More</ReadMoreButton>
                   </ActionContainer>
                 </BlogPost>
               ))}
@@ -103,7 +103,7 @@ const BlogPage = () => {
                     >
                       <FaHeart />
                     </LikeButton>
-                    <ReadMoreButton href="#">Read More</ReadMoreButton>
+                    <ReadMoreButton href="/blog-post1">Read More</ReadMoreButton>
                   </ActionContainer>
                 </BlogPost>
               ))}
@@ -132,7 +132,7 @@ const BlogPage = () => {
                     >
                       <FaHeart />
                     </LikeButton>
-                    <ReadMoreButton href="#">Read More</ReadMoreButton>
+                    <ReadMoreButton href="/blog-post2">Read More</ReadMoreButton>
                   </ActionContainer>
                 </BlogPost>
               ))}

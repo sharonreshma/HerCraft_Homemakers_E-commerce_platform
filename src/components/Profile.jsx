@@ -1,12 +1,11 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { FaHome, FaArrowLeft } from 'react-icons/fa'; // Import icons
+import { FaHome, FaArrowLeft } from 'react-icons/fa'; 
 import '../styles/Profile.css';
 
 const Profile = () => {
   const user = JSON.parse(localStorage.getItem('user')) || {};
 
-  // Default role to 'user' if not present
   const role = user.role || 'user';
 
   return (
